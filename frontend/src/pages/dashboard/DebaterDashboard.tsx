@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Mail, Calendar, Trophy, Swords, Star, Award, TrendingUp, Clock, ArrowRight } from 'lucide-react';
+import { MapPin, Mail, Calendar, Trophy, Swords, Star, Award, TrendingUp, Clock, ArrowRight, Pencil, Linkedin, Facebook, Twitter } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { statsAPI, notificationsAPI } from '../../api';
 import type { DebaterStats, Notification } from '../../types';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import EditProfileModal from '../../components/common/EditProfileModal';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
@@ -82,6 +83,7 @@ export default function DebaterDashboard() {
   const [stats, setStats] = useState<DebaterStats | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -149,7 +151,14 @@ export default function DebaterDashboard() {
             {/* ════════════ LEFT COLUMN — PROFILE SIDEBAR ════════════ */}
             <aside className="space-y-5">
               {/* Avatar + Name */}
-              <div className="card text-center">
+              <div className="card text-center relative">
+                {/* Edit button */}
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors cursor-pointer"
+                  title="Edit Profile">
+                  <Pencil className="w-4 h-4" />
+                </button>
                 {/* Large circular avatar */}
                 <div className="mx-auto w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-4xl font-black text-white border-4 border-white/10 shadow-lg shadow-blue-500/20 mb-4">
                   {user.profilePictureUrl ? (
@@ -218,6 +227,22 @@ export default function DebaterDashboard() {
                   </div>
                 </div>
               )}
+
+              {/* Social Links */}
+              <div className="flex items-center justify-center gap-6 mt-4 py-4">
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                  className="text-gray-500 hover:text-blue-500 transition-all duration-300 hover:-translate-y-1">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                  className="text-gray-500 hover:text-gray-200 transition-all duration-300 hover:-translate-y-1">
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                  className="text-gray-500 hover:text-blue-600 transition-all duration-300 hover:-translate-y-1">
+                  <Facebook className="w-5 h-5" />
+                </a>
+              </div>
             </aside>
 
             {/* ════════════ RIGHT COLUMN — STATS & ACTIVITY ════════════ */}
@@ -374,6 +399,14 @@ export default function DebaterDashboard() {
           </div>
         )}
       </div>
+      {/* Edit Profile Modal */}
+      {user && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          user={user}
+        />
+      )}
     </div>
   );
 }
