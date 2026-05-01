@@ -3,77 +3,77 @@
 
 -- ===================== ORGANIZERS (3) =====================
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Organizer1', 'organizer1', 35, 'Seasoned debate organizer with 10+ years of experience running national tournaments.', 'Colombo, Sri Lanka', 'organizer1@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Organizer1', 'organizer1', 35, 'Seasoned debate organizer with 10+ years of experience running national tournaments.', 'Colombo, Sri Lanka', 'organizer1@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'organizer1');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Organizer2', 'organizer2', 40, 'University debate coordinator and regional tournament director with a passion for youth development.', 'Kandy, Sri Lanka', 'organizer2@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Organizer2', 'organizer2', 40, 'University debate coordinator and regional tournament director with a passion for youth development.', 'Kandy, Sri Lanka', 'organizer2@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'organizer2');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Organizer3', 'organizer3', 38, 'International debate event planner specializing in Asian Parliamentary and World Schools formats.', 'Galle, Sri Lanka', 'organizer3@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Organizer3', 'organizer3', 38, 'International debate event planner specializing in Asian Parliamentary and World Schools formats.', 'Galle, Sri Lanka', 'organizer3@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'ORGANIZER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'organizer3');
 
 -- ===================== DEBATERS (10) =====================
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater1', 'debater1', 21, 'Passionate debater specializing in Asian Parliamentary format. Won 3 regional tournaments.', 'Kandy, Sri Lanka', 'debater1@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater1', 'debater1', 21, 'Passionate debater specializing in Asian Parliamentary format. Won 3 regional tournaments.', 'Kandy, Sri Lanka', 'debater1@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater1');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater2', 'debater2', 19, 'First-year debater with a passion for environmental topics and policy debates.', 'Galle, Sri Lanka', 'debater2@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater2', 'debater2', 19, 'First-year debater with a passion for environmental topics and policy debates.', 'Galle, Sri Lanka', 'debater2@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater2');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater3', 'debater3', 22, 'Experienced debater with strong skills in British Parliamentary. National finalist 2023.', 'Jaffna, Sri Lanka', 'debater3@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater3', 'debater3', 22, 'Experienced debater with strong skills in British Parliamentary. National finalist 2023.', 'Jaffna, Sri Lanka', 'debater3@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater3');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater4', 'debater4', 20, 'Young but talented debater from Peradeniya University. Specializes in Sinhala debates.', 'Peradeniya, Sri Lanka', 'debater4@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater4', 'debater4', 20, 'Young but talented debater from Peradeniya University. Specializes in Sinhala debates.', 'Peradeniya, Sri Lanka', 'debater4@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater4');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater5', 'debater5', 23, 'Senior debater and team captain at Moratuwa University. Multiple tournament winner.', 'Moratuwa, Sri Lanka', 'debater5@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater5', 'debater5', 23, 'Senior debater and team captain at Moratuwa University. Multiple tournament winner.', 'Moratuwa, Sri Lanka', 'debater5@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater5');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater6', 'debater6', 18, 'Freshman debater eager to learn and compete. Interested in economics and social justice topics.', 'Matara, Sri Lanka', 'debater6@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater6', 'debater6', 18, 'Freshman debater eager to learn and compete. Interested in economics and social justice topics.', 'Matara, Sri Lanka', 'debater6@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater6');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater7', 'debater7', 21, 'Bilingual debater fluent in English and Tamil. Competed in 12 national tournaments.', 'Batticaloa, Sri Lanka', 'debater7@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater7', 'debater7', 21, 'Bilingual debater fluent in English and Tamil. Competed in 12 national tournaments.', 'Batticaloa, Sri Lanka', 'debater7@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater7');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater8', 'debater8', 20, 'Philosophy student with excellent argumentation skills. Best speaker at Inter-University Debate 2024.', 'Colombo, Sri Lanka', 'debater8@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater8', 'debater8', 20, 'Philosophy student with excellent argumentation skills. Best speaker at Inter-University Debate 2024.', 'Colombo, Sri Lanka', 'debater8@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater8');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater9', 'debater9', 22, 'Law student and competitive debater. Specializes in legal and constitutional debates.', 'Negombo, Sri Lanka', 'debater9@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater9', 'debater9', 22, 'Law student and competitive debater. Specializes in legal and constitutional debates.', 'Negombo, Sri Lanka', 'debater9@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater9');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, created_at)
-SELECT 'Debater10', 'debater10', 19, 'Engineering student who brings analytical thinking to every debate. Rising star in the circuit.', 'Kurunegala, Sri Lanka', 'debater10@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
+SELECT 'Debater10', 'debater10', 19, 'Engineering student who brings analytical thinking to every debate. Rising star in the circuit.', 'Kurunegala, Sri Lanka', 'debater10@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'DEBATER', NULL, 'PUBLIC', 'en', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'debater10');
 
 -- ===================== JUDGES (5) =====================
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, expertise, years_of_experience, created_at)
-SELECT 'Judge1', 'judge1', 42, 'Former national debate champion. Certified judge for Asian Parliamentary and BP formats.', 'Colombo, Sri Lanka', 'judge1@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'JUDGE', NULL, 'PUBLIC', 'en', 'Asian Parliamentary, British Parliamentary', 15, NOW()
+SELECT 'Judge1', 'judge1', 42, 'Former national debate champion. Certified judge for Asian Parliamentary and BP formats.', 'Colombo, Sri Lanka', 'judge1@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'JUDGE', NULL, 'PUBLIC', 'en', 'Asian Parliamentary, British Parliamentary', 15, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'judge1');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, expertise, years_of_experience, created_at)
-SELECT 'Judge2', 'judge2', 50, 'Professor of Communication Studies. Expert in rhetorical analysis and debate adjudication.', 'Colombo, Sri Lanka', 'judge2@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'JUDGE', NULL, 'PUBLIC', 'en', 'Traditional Debate, Asian Parliamentary', 20, NOW()
+SELECT 'Judge2', 'judge2', 50, 'Professor of Communication Studies. Expert in rhetorical analysis and debate adjudication.', 'Colombo, Sri Lanka', 'judge2@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'JUDGE', NULL, 'PUBLIC', 'en', 'Traditional Debate, Asian Parliamentary', 20, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'judge2');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, expertise, years_of_experience, created_at)
-SELECT 'Judge3', 'judge3', 38, 'Practicing lawyer and debate coach. Specializes in World Schools and Lincoln-Douglas formats.', 'Kandy, Sri Lanka', 'judge3@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'JUDGE', NULL, 'PUBLIC', 'en', 'World Schools, Lincoln-Douglas', 10, NOW()
+SELECT 'Judge3', 'judge3', 38, 'Practicing lawyer and debate coach. Specializes in World Schools and Lincoln-Douglas formats.', 'Kandy, Sri Lanka', 'judge3@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'JUDGE', NULL, 'PUBLIC', 'en', 'World Schools, Lincoln-Douglas', 10, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'judge3');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, expertise, years_of_experience, created_at)
-SELECT 'Judge4', 'judge4', 45, 'Senior lecturer in Political Science. Experienced in policy debate and public forum adjudication.', 'Galle, Sri Lanka', 'judge4@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'JUDGE', NULL, 'PUBLIC', 'en', 'Policy Debate, Public Forum', 18, NOW()
+SELECT 'Judge4', 'judge4', 45, 'Senior lecturer in Political Science. Experienced in policy debate and public forum adjudication.', 'Galle, Sri Lanka', 'judge4@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'JUDGE', NULL, 'PUBLIC', 'en', 'Policy Debate, Public Forum', 18, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'judge4');
 
 INSERT INTO users (full_name, username, age, bio, location, email, password_hash, role, profile_picture_url, privacy_status, language, expertise, years_of_experience, created_at)
-SELECT 'Judge5', 'judge5', 36, 'Journalist and media trainer. Brings real-world communication expertise to debate adjudication.', 'Jaffna, Sri Lanka', 'judge5@dms.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EH0xP5u/1Ksg4YVPC.Ja.', 'JUDGE', NULL, 'PUBLIC', 'en', 'British Parliamentary, Asian Parliamentary', 8, NOW()
+SELECT 'Judge5', 'judge5', 36, 'Journalist and media trainer. Brings real-world communication expertise to debate adjudication.', 'Jaffna, Sri Lanka', 'judge5@dms.com', '$2a$10$rJLvrCnSjgJhhyTkKeuY2egjmVdNpx3BaCTadBCdnP/wq3YSiIw76', 'JUDGE', NULL, 'PUBLIC', 'en', 'British Parliamentary, Asian Parliamentary', 8, NOW()
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'judge5');
 
 -- ===================== DEBATER STATS =====================
