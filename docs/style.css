@@ -314,6 +314,9 @@ h4 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
 .team-card:hover {
@@ -437,7 +440,8 @@ h4 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0) invert(1); /* Ensure black icons become white for visibility on dark background */
+    filter: brightness(0) invert(1);
+    /* Ensure black icons become white for visibility on dark background */
 }
 
 .socials a i {
@@ -710,5 +714,749 @@ h4 {
 
     .step-number {
         font-size: 3.5rem;
+    }
+}
+
+/* ============================
+   Architecture Section
+   ============================ */
+.architecture {
+    padding: 100px 0;
+    background: radial-gradient(circle at center, rgba(128, 0, 0, 0.05) 0%, transparent 70%);
+}
+
+.arch-diagram {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+}
+
+.arch-column {
+    flex: 1;
+    min-width: 250px;
+    max-width: 360px;
+    padding: 35px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.arch-column h3 {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.tech-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 215, 0, 0.3);
+    transform: translateX(5px);
+}
+
+.tech-item i {
+    width: 18px;
+    height: 18px;
+    color: var(--gold);
+}
+
+.arch-connector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    padding: 0;
+    min-width: 130px;
+}
+
+.connector-arrow {
+    position: relative;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.connector-arrow::after {
+    content: '→';
+    display: block;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-top: -5px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.connector-arrow.back::after {
+    content: '←';
+}
+
+/* Backend Stack Styles */
+.arch-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.arch-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: -10px;
+    margin-bottom: 25px;
+}
+
+.arch-badge {
+    font-size: 0.75rem;
+    background: linear-gradient(135deg, var(--maroon), #a00000);
+    padding: 4px 12px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(128, 0, 0, 0.3);
+}
+
+.stack-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+
+.layer {
+    background: rgba(128, 0, 0, 0.1);
+    border: 1px solid rgba(128, 0, 0, 0.2);
+    padding: 14px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-light);
+}
+
+.layer small {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.layer:hover {
+    background: rgba(128, 0, 0, 0.2);
+    border-color: var(--gold);
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Database Styles */
+.db-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.db-brand i {
+    width: 70px;
+    height: 70px;
+    color: var(--gold);
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.2));
+}
+
+.db-brand span {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.db-details {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.db-details p {
+    margin-bottom: 10px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.db-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.db-details li {
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.db-details li::before {
+    content: '•';
+    color: var(--gold);
+    font-weight: bold;
+}
+
+/* Responsive Arch */
+@media (max-width: 1000px) {
+    .arch-diagram {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .arch-column {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .arch-connector {
+        flex-direction: row;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        padding: 30px 0;
+        gap: 20px;
+    }
+
+    .connector-arrow::after {
+        content: '↓';
+        font-size: 2.5rem;
+    }
+
+    .connector-arrow.back::after {
+        content: '↑';
+    }
+}
+
+/* ============================
+   EER Diagram Section
+   ============================ */
+.eer {
+    padding: 100px 0;
+    background: radial-gradient(circle at top right, rgba(128, 0, 0, 0.08) 0%, transparent 40%);
+    overflow: hidden;
+}
+
+.eer-wrapper {
+    overflow-x: auto;
+    padding: 40px 0;
+    margin-top: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--maroon) transparent;
+}
+
+.eer-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.eer-wrapper::-webkit-scrollbar-thumb {
+    background: var(--maroon);
+    border-radius: 10px;
+}
+
+.eer-container {
+    min-width: 1300px;
+    padding: 60px 40px;
+    position: relative;
+}
+
+.eer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.eer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.eer-table {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+}
+
+.eer-table:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--gold);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.1);
+}
+
+.table-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 18px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-header::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--maroon);
+    border-radius: 2px;
+}
+
+.main-table .table-header {
+    background: rgba(128, 0, 0, 0.2);
+}
+
+.table-row {
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: #ddd;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.table-row .type {
+    color: #666;
+    font-size: 0.7rem;
+    font-family: monospace;
+}
+
+.table-row.pk {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.table-row.pk::after {
+    content: 'PK';
+    font-size: 0.6rem;
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--gold);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.table-row.fk::after {
+    content: 'FK';
+    font-size: 0.6rem;
+    background: rgba(128, 0, 0, 0.2);
+    color: #ff4d4d;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Connection Lines Simulation */
+.eer-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.eer-connections-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.eer-line-path {
+    fill: none;
+    stroke: rgba(255, 215, 0, 0.2);
+    stroke-width: 1.5;
+    transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.eer-table:hover~svg .eer-line-path[data-table*="hovered-table-id"] {
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    opacity: 1;
+}
+
+/* Add a glowing effect for active connections */
+.eer-line-path.active {
+    stroke: var(--gold);
+    stroke-width: 2;
+    opacity: 1;
+    filter: drop-shadow(0 0 5px var(--gold));
+}
+
+@media (max-width: 1000px) {
+    .eer-container {
+        min-width: 1000px;
+    }
+}
+
+/* ============================
+   Project Structure
+   ============================ */
+.project-structure {
+    padding: 100px 0;
+}
+
+.structure-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.structure-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--maroon);
+}
+
+.tree-container {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+.tree-line {
+    display: flex;
+    gap: 20px;
+    padding: 2px 0;
+    transition: background 0.2s ease;
+}
+
+.tree-line:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.tree-node {
+    color: var(--gold);
+    font-weight: 600;
+    min-width: 300px;
+}
+
+.tree-comment {
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.tree-branch {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .tree-container {
+        font-size: 0.75rem;
+    }
+
+    .tree-node {
+        min-width: 200px;
+    }
+}
+
+.workflow-section {
+    padding: 100px 0;
+    background: rgba(18, 18, 18, 0.5);
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.diagrams-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.diagram-main,
+.diagram-side {
+    width: 100%;
+}
+
+.sync-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.sync-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.sync-node {
+    width: 50px;
+    height: 50px;
+    background: var(--maroon);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(128, 0, 0, 0.4);
+}
+
+.sync-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 300px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.sync-box h3 {
+    color: var(--gold);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    font-weight: 600;
+}
+
+.sync-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.sync-item i {
+    color: var(--gold);
+    width: 16px;
+}
+
+.sync-item-text strong {
+    display: block;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.sync-item-text p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Workflow Cards */
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.workflow-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.workflow-card h3 {
+    font-size: 1rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    padding-bottom: 8px;
+}
+
+.workflow-step {
+    background: rgba(128, 0, 0, 0.1);
+    border: 1px solid rgba(128, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    position: relative;
+    text-align: center;
+    color: #eee;
+}
+
+.workflow-step::after {
+    content: '↓';
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.workflow-step:last-child::after {
+    display: none;
+}
+
+.step-meta {
+    display: block;
+    font-size: 0.65rem;
+    color: #888;
+    margin-top: 3px;
+}
+
+@media (max-width: 1200px) {
+    .diagrams-wrapper {
+        flex-direction: column;
+    }
+
+    .diagram-main,
+    .diagram-side {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .workflow-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 50px;
+}
+
+.workflow-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.workflow-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.workflow-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--gold);
+}
+
+.workflow-card h3 {
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    padding-bottom: 8px;
+}
+
+.workflow-step {
+    background: rgba(128, 0, 0, 0.1);
+    border: 1px solid rgba(128, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    position: relative;
+    text-align: center;
+    color: var(--text-light);
+    transition: all 0.3s ease;
+}
+
+.workflow-step:hover {
+    background: rgba(128, 0, 0, 0.2);
+    transform: translateX(5px);
+}
+
+.workflow-step::after {
+    content: '↓';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.workflow-step:last-child::after {
+    display: none;
+}
+
+.step-meta {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+@media (max-width: 1100px) {
+    .workflow-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .workflow-grid {
+        grid-template-columns: 1fr;
     }
 }

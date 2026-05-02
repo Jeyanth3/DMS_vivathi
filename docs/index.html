@@ -55,11 +55,424 @@
                     <span class="badge"><i data-lucide="server"></i> Spring Boot</span>
                     <span class="badge"><i data-lucide="database"></i> PostgreSQL</span>
                     <span class="badge"><i data-lucide="plug"></i> REST API</span>
-                    <span class="badge"><i data-lucide="send"></i> Axios / Fetch</span>
+                    <span class="badge"><i data-lucide="send"></i> Axios</span>
                 </div>
             </div>
         </section>
 
+        <!-- Project Structure Section -->
+        <section id="structure" class="project-structure">
+            <div class="container">
+                <h2 class="section-heading" data-aos="fade-up">Project Structure</h2>
+                <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Organized codebase hierarchy for Backend
+                    (Spring Boot) and Frontend (React).</p>
+
+                <div class="structure-box" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tree-container">
+                        DMS/
+                        <span class="tree-branch">├──</span> <span class="tree-node">backend/</span> <span
+                            class="tree-comment"># Spring Boot application</span>
+                        <span class="tree-branch">│ ├──</span> <span class="tree-node">src/main/java/com/dms/</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">entity/</span> <span
+                            class="tree-comment"># JPA entities</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">dto/</span> <span
+                            class="tree-comment"># Data Transfer Objects</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">repository/</span> <span
+                            class="tree-comment"># Spring Data JPA repos</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">service/</span> <span
+                            class="tree-comment"># Business logic layer</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">controller/</span> <span
+                            class="tree-comment"># REST API controllers</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">security/</span> <span
+                            class="tree-comment"># JWT filter & util</span>
+                        <span class="tree-branch">│ │ ├──</span> <span class="tree-node">exception/</span> <span
+                            class="tree-comment"># Global exception handler</span>
+                        <span class="tree-branch">│ │ └──</span> <span class="tree-node">config/</span> <span
+                            class="tree-comment"># Security & CORS config</span>
+                        <span class="tree-branch">│ └──</span> <span class="tree-node">src/main/resources/</span>
+                        <span class="tree-branch">│ ├──</span> <span class="tree-node">application.properties</span>
+                        <span class="tree-comment"># DB & JWT config</span>
+                        <span class="tree-branch">│ └──</span> <span class="tree-node">data.sql</span> <span
+                            class="tree-comment"># Seed data</span>
+                        <span class="tree-branch">└──</span> <span class="tree-node">frontend/</span> <span
+                            class="tree-comment"># React application</span>
+                        <span class="tree-branch"> └──</span> <span class="tree-node">src/</span>
+                        <span class="tree-branch"> ├──</span> <span class="tree-node">components/</span>
+                        <span class="tree-branch"> │ ├──</span> <span class="tree-node">layout/</span> <span
+                            class="tree-comment"># Navbar, Footer, PublicLayout</span>
+                        <span class="tree-branch"> │ └──</span> <span class="tree-node">common/</span> <span
+                            class="tree-comment"># Avatar, Toast, SearchBar, Spinner</span>
+                        <span class="tree-branch"> ├──</span> <span class="tree-node">pages/</span>
+                        <span class="tree-branch"> │ ├──</span> <span class="tree-node">public/</span> <span
+                            class="tree-comment"># Home, Scoring, News, About, Search</span>
+                        <span class="tree-branch"> │ ├──</span> <span class="tree-node">auth/</span> <span
+                            class="tree-comment"># RoleSelect, Login, Signup</span>
+                        <span class="tree-branch"> │ ├──</span> <span class="tree-node">dashboard/</span> <span
+                            class="tree-comment"># Debater, Judge, Organizer dashboards</span>
+                        <span class="tree-branch"> │ ├──</span> <span class="tree-node">tournament/</span> <span
+                            class="tree-comment"># Tournament page, CreateWizard, ScoreSheet</span>
+                        <span class="tree-branch"> │ └──</span> <span class="tree-node">shared/</span> <span
+                            class="tree-comment"># Notifications, Calendar, Settings, Profile</span>
+                        <span class="tree-branch"> ├──</span> <span class="tree-node">context/</span> <span
+                            class="tree-comment"># AuthContext (JWT + user state)</span>
+                        <span class="tree-branch"> ├──</span> <span class="tree-node">api/</span> <span
+                            class="tree-comment"># Axios instance + all API calls</span>
+                        <span class="tree-branch"> └──</span> <span class="tree-node">types/</span> <span
+                            class="tree-comment"># TypeScript interfaces</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Software Architecture Section -->
+        <section id="architecture" class="architecture">
+            <div class="container">
+                <h2 class="section-heading" data-aos="fade-up">System Architecture</h2>
+                <p class="section-sub" data-aos="fade-up" data-aos-delay="100">High-level Software Architecture for
+                    Full-Stack Debate Management System</p>
+
+                <div class="arch-diagram" data-aos="zoom-in" data-aos-duration="1000">
+                    <!-- Frontend Column -->
+                    <div class="arch-column glass">
+                        <h3>Frontend</h3>
+                        <div class="tech-item"><i data-lucide="atom"></i> React</div>
+                        <div class="tech-item"><i data-lucide="code-2"></i> TypeScript</div>
+                        <div class="tech-item"><i data-lucide="zap"></i> Vite</div>
+                        <div class="tech-item"><i data-lucide="palette"></i> Tailwind CSS</div>
+                        <div class="tech-item"><i data-lucide="route"></i> React Router DOM</div>
+                        <div class="tech-item"><i data-lucide="bar-chart-3"></i> Recharts</div>
+                    </div>
+
+                    <!-- Connection Arrows -->
+                    <div class="arch-connector">
+                        <div class="connector-arrow">API Calls</div>
+                        <div class="connector-arrow back">Requests / Responses</div>
+                    </div>
+
+                    <!-- Backend Column -->
+                    <div class="arch-column glass">
+                        <div class="arch-header">
+                            <h3>Backend</h3>
+                            <div class="arch-badges">
+                                <span class="arch-badge">Spring Boot</span>
+                                <span class="arch-badge">Java</span>
+                            </div>
+                        </div>
+                        <div class="stack-layers">
+                            <div class="layer">Entity</div>
+                            <div class="layer">DTO</div>
+                            <div class="layer">Repository</div>
+                            <div class="layer">Service <small>REST API Architecture</small></div>
+                            <div class="layer">Controller</div>
+                            <div class="layer">Security Config <small>JWT</small></div>
+                            <div class="layer">Exception Handling</div>
+                        </div>
+                    </div>
+
+                    <!-- Connection Arrows -->
+                    <div class="arch-connector">
+                        <div class="connector-arrow">Database Access</div>
+                        <div class="connector-arrow back">Requests / Responses</div>
+                    </div>
+
+                    <!-- Database Column -->
+                    <div class="arch-column glass">
+                        <h3>Database</h3>
+                        <div class="db-brand">
+                            <i data-lucide="database"></i>
+                            <span>PostgreSQL</span>
+                        </div>
+                        <div class="db-details">
+                            <p>Proper Relational schema with:</p>
+                            <ul>
+                                <li>Foreign keys</li>
+                                <li>Optimized Indexes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EER Diagram Section -->
+        <section id="eer" class="eer">
+            <div class="container">
+                <h2 class="section-heading" data-aos="fade-up">Database Entity-Relationship (EER)</h2>
+                <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Our optimized relational schema designed
+                    for high-performance debate data management.</p>
+
+                <div class="eer-wrapper" data-aos="fade-up">
+                    <div class="eer-container">
+                        <!-- Entities will go here -->
+                        <div class="eer-grid">
+                            <!-- Column 1 -->
+                            <div class="eer-col">
+                                <div class="eer-table" id="table-calendar">
+                                    <div class="table-header">calendar_events</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">description <span class="type">varchar(1000)</span></div>
+                                    <div class="table-row">end_at <span class="type">timestamp</span></div>
+                                    <div class="table-row">start_at <span class="type">timestamp</span></div>
+                                    <div class="table-row">title <span class="type">varchar(500)</span></div>
+                                    <div class="table-row fk">user_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-debater-stats">
+                                    <div class="table-header">debater_stats</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">best_debater_count <span class="type">int</span></div>
+                                    <div class="table-row">losses <span class="type">int</span></div>
+                                    <div class="table-row">matches_played <span class="type">int</span></div>
+                                    <div class="table-row">wins <span class="type">int</span></div>
+                                    <div class="table-row fk">debater_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-judge-stats">
+                                    <div class="table-header">judge_stats</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">losses <span class="type">int</span></div>
+                                    <div class="table-row">matches_judged <span class="type">int</span></div>
+                                    <div class="table-row">wins <span class="type">int</span></div>
+                                    <div class="table-row fk">judge_id <span class="type">bigint</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="eer-col">
+                                <div class="eer-table main-table" id="table-users">
+                                    <div class="table-header">users</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">email <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">full_name <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">username <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">role <span class="type">varchar(50)</span></div>
+                                    <div class="table-row">expertise <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">location <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">years_of_experience <span class="type">int</span></div>
+                                    <div class="table-row">created_at <span class="type">timestamp</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-news">
+                                    <div class="table-header">news_posts</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">category <span class="type">varchar(50)</span></div>
+                                    <div class="table-row">content <span class="type">text</span></div>
+                                    <div class="table-row">title <span class="type">varchar(255)</span></div>
+                                    <div class="table-row fk">author_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-notifications">
+                                    <div class="table-header">notifications</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">message <span class="type">varchar(1000)</span></div>
+                                    <div class="table-row">read_status <span class="type">boolean</span></div>
+                                    <div class="table-row">created_at <span class="type">timestamp</span></div>
+                                    <div class="table-row fk">user_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-school-debaters">
+                                    <div class="table-header">school_debaters</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">debater_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">school_id <span class="type">bigint</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Column 3 -->
+                            <div class="eer-col">
+                                <div class="eer-table" id="table-tournaments">
+                                    <div class="table-header">tournaments</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">name <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">status <span class="type">varchar(50)</span></div>
+                                    <div class="table-row">debate_type <span class="type">varchar(100)</span></div>
+                                    <div class="table-row">tournament_type <span class="type">varchar(100)</span></div>
+                                    <div class="table-row fk">organizer_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-tournament-judges">
+                                    <div class="table-header">tournament_judges</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">judge_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">tournament_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-score-templates">
+                                    <div class="table-header">score_sheet_templates</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">name <span class="type">varchar(255)</span></div>
+                                    <div class="table-row">criteria_json <span class="type">jsonb</span></div>
+                                    <div class="table-row fk">tournament_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-discussion">
+                                    <div class="table-header">discussion_comments</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">content <span class="type">text</span></div>
+                                    <div class="table-row fk">user_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">tournament_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">match_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">parent_comment_id <span class="type">bigint</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Column 4 -->
+                            <div class="eer-col">
+                                <div class="eer-table" id="table-schools">
+                                    <div class="table-header">schools</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">name <span class="type">varchar(255)</span></div>
+                                    <div class="table-row fk">tournament_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-matches">
+                                    <div class="table-header">matches</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">round_number <span class="type">int</span></div>
+                                    <div class="table-row">topic <span class="type">varchar(1000)</span></div>
+                                    <div class="table-row">status <span class="type">varchar(50)</span></div>
+                                    <div class="table-row fk">tournament_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">proposition_school_id <span class="type">bigint</span>
+                                    </div>
+                                    <div class="table-row fk">opposition_school_id <span class="type">bigint</span>
+                                    </div>
+                                </div>
+
+                                <div class="eer-table" id="table-match-judges">
+                                    <div class="table-header">match_judges</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">judge_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">match_id <span class="type">bigint</span></div>
+                                </div>
+
+                                <div class="eer-table" id="table-submissions">
+                                    <div class="table-header">score_sheet_submissions</div>
+                                    <div class="table-row pk">id <span class="type">bigint</span></div>
+                                    <div class="table-row">proposition_score <span class="type">double</span></div>
+                                    <div class="table-row">opposition_score <span class="type">double</span></div>
+                                    <div class="table-row fk">judge_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">match_id <span class="type">bigint</span></div>
+                                    <div class="table-row fk">selected_best_speaker_id <span class="type">bigint</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SVG for dynamic connection lines -->
+                        <svg id="eer-svg" class="eer-connections-svg"></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Operational Logic -->
+        <section id="system-logic" class="workflow-section">
+            <div class="container">
+                <div class="diagrams-wrapper">
+                    <!-- Operational Workflow -->
+                    <div class="diagram-main">
+                        <h2 class="section-heading" data-aos="fade-up" style="font-size: 2rem;">Operational Workflow
+                            Diagram</h2>
+                        <div class="workflow-grid" style="margin-top: 30px;">
+                            <!-- Organizer Actions -->
+                            <div class="workflow-col" data-aos="fade-up">
+                                <div class="workflow-card">
+                                    <h3>Organizer Actions</h3>
+                                    <div class="workflow-step">Tournament Page<span class="step-meta">Setup &
+                                            Config</span></div>
+                                    <div class="workflow-step">Create Match Flow<span class="step-meta">Assigning Teams
+                                            & Judges</span></div>
+                                </div>
+                            </div>
+                            <!-- System Processing -->
+                            <div class="workflow-col" data-aos="fade-up" data-aos-delay="200">
+                                <div class="workflow-card">
+                                    <h3>System Processing</h3>
+                                    <div class="workflow-step">Generate Secure Links<span
+                                            class="step-meta">Judge-Specific Access</span></div>
+                                    <div class="workflow-step">Real-Time Notifications<span class="step-meta">Sent to
+                                            Judges & Debaters</span></div>
+                                    <div class="workflow-card"
+                                        style="margin-top: 15px; padding: 12px; background: rgba(128, 0, 0, 0.1);">
+                                        <h4 style="font-size: 0.8rem; color: var(--gold); margin-bottom: 5px;">Match
+                                            Result Logic</h4>
+                                        <ul
+                                            style="list-style: none; font-size: 0.7rem; color: var(--text-muted); line-height: 1.4;">
+                                            <li>• Calculate Averages</li>
+                                            <li>• Save Winner & POTM</li>
+                                            <li>• Mark as Completed</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Judge Flow -->
+                            <div class="workflow-col" data-aos="fade-up" data-aos-delay="400">
+                                <div class="workflow-card">
+                                    <h3>Judge Flow</h3>
+                                    <div class="workflow-step">Open Assigned Score Sheet<span class="step-meta">Match ID
+                                            Validation</span></div>
+                                    <div class="workflow-step">Submit Score Sheet<span class="step-meta">Scores &
+                                            Comments</span></div>
+                                    <div class="workflow-step"
+                                        style="border-color: var(--gold); background: rgba(255, 215, 0, 0.05);">
+                                        Prevent Duplicate Submission
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Debater Context -->
+                            <div class="workflow-col" data-aos="fade-up" data-aos-delay="600">
+                                <div class="workflow-card">
+                                    <h3>Debater Context</h3>
+                                    <div class="workflow-step" style="opacity: 0.7;">Passive Role<span
+                                            class="step-meta">No action required</span></div>
+                                    <div class="workflow-step">Receives Match Info<span class="step-meta">Through
+                                            Notifications Panel</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post-Match Sync -->
+                    <div class="diagram-side">
+                        <h2 class="section-heading" data-aos="fade-up" style="font-size: 2rem;">Post-Match Data
+                            Synchronization</h2>
+                        <div class="sync-grid">
+                            <div class="sync-flow" data-aos="zoom-in"
+                                style="flex-direction: row; justify-content: center; display: flex; gap: 40px; flex-wrap: wrap;">
+                                <div class="sync-box" style="width: auto;">
+                                    <h3>Match Completed</h3>
+                                    <p class="section-sub" style="margin-bottom: 0; font-size: 0.8rem;">Trigger Event
+                                    </p>
+                                </div>
+                                <div class="sync-node">
+                                    <i data-lucide="refresh-cw" class="animate-spin"></i>
+                                </div>
+                                <div class="sync-box" style="width: auto;">
+                                    <h3>Stream 1: Stats Update</h3>
+                                    <div class="sync-item">
+                                        <i data-lucide="bar-chart-3"></i>
+                                        <div class="sync-item-text"><strong>Statistics Update</strong>
+                                            <p>Debater, Judge & School metrics</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sync-box" style="width: auto;">
+                                    <h3>Stream 2: End Results</h3>
+                                    <div class="sync-item">
+                                        <i data-lucide="trophy"></i>
+                                        <div class="sync-item-text"><strong>Tournament Results</strong>
+                                            <p>Calculate Winners & Leaderboards</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
         <!-- App Showcase Section -->
         <section id="showcase" class="showcase">
@@ -253,6 +666,7 @@
             </div>
         </section>
 
+
         <!-- Team & Contribution Path -->
         <section id="team" class="team">
             <div class="container">
@@ -263,48 +677,79 @@
                 <div class="team-container">
 
                     <div class="team-grid">
+                        <!-- Pathimilan -->
                         <div class="team-card" data-aos="zoom-in" data-aos-delay="200">
                             <div class="avatar"><img src="screenshots/pathimilan.jpg" alt="P. Pathimilan"></div>
                             <h4>P. Pathimilan</h4>
+                            <span class="role">Application Security & Backend Integration Engineer</span>
+                            <div class="about-section">
+                                <span class="about-label">About</span>
+                                <p class="about-text">Expert in application security and authentication systems design.
+                                    Focuses on secure backend logic and access control mechanisms.</p>
+                            </div>
                             <div class="socials">
-                                <a href="#" target="_blank" title="GitHub"><img src="screenshots/gtihub.png"
-                                        alt="GitHub"></a>
+                                <a href="https://github.com/cepdnaclk/e22-co2060-DMS.git" target="_blank"
+                                    title="GitHub"><img src="screenshots/gtihub.png" alt="GitHub"></a>
                                 <a href="#" target="_blank" title="LinkedIn"><img src="screenshots/linkedin.png"
                                         alt="LinkedIn"></a>
                                 <a href="#" target="_blank" title="ePortfolio"><img src="screenshots/portfolio.png"
                                         alt="ePortfolio"></a>
                             </div>
                         </div>
+
+                        <!-- Bhaveenthan -->
                         <div class="team-card" data-aos="zoom-in" data-aos-delay="400">
                             <div class="avatar"><img src="screenshots/bhaveenthan.jpg" alt="K. Bhaveenthan"></div>
                             <h4>K. Bhaveenthan</h4>
+                            <span class="role">Backend Systems & API Architect</span>
+                            <div class="about-section">
+                                <span class="about-label">About</span>
+                                <p class="about-text">An enthusiast in database design and scalable backend systems.
+                                    Developer of efficient data flow and structured API architecture.</p>
+                            </div>
                             <div class="socials">
-                                <a href="#" target="_blank" title="GitHub"><img src="screenshots/gtihub.png"
-                                        alt="GitHub"></a>
+                                <a href="https://github.com/cepdnaclk/e22-co2060-DMS.git" target="_blank"
+                                    title="GitHub"><img src="screenshots/gtihub.png" alt="GitHub"></a>
                                 <a href="#" target="_blank" title="LinkedIn"><img src="screenshots/linkedin.png"
                                         alt="LinkedIn"></a>
                                 <a href="#" target="_blank" title="ePortfolio"><img src="screenshots/portfolio.png"
                                         alt="ePortfolio"></a>
                             </div>
                         </div>
+
+                        <!-- Lakshigan -->
                         <div class="team-card" data-aos="zoom-in" data-aos-delay="600">
-                            <div class="avatar"><img src="screenshots/jeyanth.jpg" alt="A.L. Jeyanth"></div>
-                            <h4>A.L. Jeyanth</h4>
+                            <div class="avatar"><img src="screenshots/jeyanth.jpg" alt="A. Lakshigan"></div>
+                            <h4>A. Lakshigan</h4>
+                            <span class="role">UI/UX Engineer</span>
+                            <div class="about-section">
+                                <span class="about-label">About</span>
+                                <p class="about-text">Expert in user interface design and experience optimization.
+                                    Skilled in creating responsive layouts and seamless frontend integration.</p>
+                            </div>
                             <div class="socials">
-                                <a href="#" target="_blank" title="GitHub"><img src="screenshots/gtihub.png"
-                                        alt="GitHub"></a>
+                                <a href="https://github.com/cepdnaclk/e22-co2060-DMS.git" target="_blank"
+                                    title="GitHub"><img src="screenshots/gtihub.png" alt="GitHub"></a>
                                 <a href="#" target="_blank" title="LinkedIn"><img src="screenshots/linkedin.png"
                                         alt="LinkedIn"></a>
                                 <a href="#" target="_blank" title="ePortfolio"><img src="screenshots/portfolio.png"
                                         alt="ePortfolio"></a>
                             </div>
                         </div>
+
+                        <!-- Manojh -->
                         <div class="team-card" data-aos="zoom-in" data-aos-delay="800">
                             <div class="avatar"><img src="screenshots/Manojh.jpeg" alt="P. Manojh"></div>
                             <h4>P. Manojh</h4>
+                            <span class="role">Frontend Developer & QA Engineer</span>
+                            <div class="about-section">
+                                <span class="about-label">About</span>
+                                <p class="about-text">Frontend developer ensuring reliable interactive application
+                                    workflows. Ensure user validation and reliable user interactions.</p>
+                            </div>
                             <div class="socials">
-                                <a href="#" target="_blank" title="GitHub"><img src="screenshots/gtihub.png"
-                                        alt="GitHub"></a>
+                                <a href="https://github.com/cepdnaclk/e22-co2060-DMS.git" target="_blank"
+                                    title="GitHub"><img src="screenshots/gtihub.png" alt="GitHub"></a>
                                 <a href="#" target="_blank" title="LinkedIn"><img src="screenshots/linkedin.png"
                                         alt="LinkedIn"></a>
                                 <a href="#" target="_blank" title="ePortfolio"><img src="screenshots/portfolio.png"
@@ -336,7 +781,8 @@
             <h2>View Our Progress</h2>
             <p>Check out the internal repository or see the system in action.</p>
             <div class="cta-buttons">
-                <a href="#" class="btn btn-outline"><i data-lucide="github"></i> GitHub Repository</a>
+                <a href="https://github.com/cepdnaclk/e22-co2060-DMS.git" class="btn btn-outline" target="_blank"><i
+                        data-lucide="github"></i> GitHub Repository</a>
                 <a href="#" class="btn btn-primary"><i data-lucide="external-link"></i> Live Demo</a>
             </div>
         </div>
@@ -370,6 +816,83 @@
                 path.style.strokeDashoffset = Math.max(0, 2000 - drawLength);
             }
         });
+
+        // EER Diagram Relationship Lines
+        function drawEERLines() {
+            const svg = document.getElementById('eer-svg');
+            if (!svg) return;
+
+            svg.innerHTML = '';
+            const container = document.querySelector('.eer-container');
+            const cRect = container.getBoundingClientRect();
+
+            const relationships = [
+                { from: 'table-calendar', to: 'table-users', label: 'user_id' },
+                { from: 'table-notifications', to: 'table-users', label: 'user_id' },
+                { from: 'table-news', to: 'table-users', label: 'author_id' },
+                { from: 'table-debater-stats', to: 'table-users', label: 'debater_id' },
+                { from: 'table-judge-stats', to: 'table-users', label: 'judge_id' },
+                { from: 'table-tournaments', to: 'table-users', label: 'organizer_id' },
+                { from: 'table-score-templates', to: 'table-tournaments', label: 'tournament_id' },
+                { from: 'table-tournament-judges', to: 'table-users', label: 'judge_id' },
+                { from: 'table-tournament-judges', to: 'table-tournaments', label: 'tournament_id' },
+                { from: 'table-school-debaters', to: 'table-users', label: 'debater_id' },
+                { from: 'table-school-debaters', to: 'table-schools', label: 'school_id' },
+                { from: 'table-schools', to: 'table-tournaments', label: 'tournament_id' },
+                { from: 'table-matches', to: 'table-tournaments', label: 'tournament_id' },
+                { from: 'table-matches', to: 'table-schools', label: 'school_id' },
+                { from: 'table-match-judges', to: 'table-users', label: 'judge_id' },
+                { from: 'table-match-judges', to: 'table-matches', label: 'match_id' },
+                { from: 'table-submissions', to: 'table-matches', label: 'match_id' },
+                { from: 'table-submissions', to: 'table-users', label: 'selected_best_speaker_id' },
+                { from: 'table-discussion', to: 'table-users', label: 'user_id' },
+                { from: 'table-discussion', to: 'table-tournaments', label: 'tournament_id' },
+                { from: 'table-discussion', to: 'table-matches', label: 'match_id' },
+                { from: 'table-discussion', to: 'table-discussion', label: 'parent_comment_id' }
+            ];
+
+            relationships.forEach(rel => {
+                const startEl = document.getElementById(rel.from);
+                const endEl = document.getElementById(rel.to);
+
+                if (startEl && endEl) {
+                    const startRect = startEl.getBoundingClientRect();
+                    const endRect = endEl.getBoundingClientRect();
+
+                    const x1 = (startRect.left + startRect.right) / 2 - cRect.left;
+                    const y1 = (startRect.top + startRect.bottom) / 2 - cRect.top;
+                    const x2 = (endRect.left + endRect.right) / 2 - cRect.left;
+                    const y2 = (endRect.top + endRect.bottom) / 2 - cRect.top;
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    // Create a curved path
+                    const dx = x2 - x1;
+                    const dy = y2 - y1;
+                    const adx = Math.abs(dx);
+                    const ady = Math.abs(dy);
+
+                    let d;
+                    if (adx > ady) {
+                        d = `M ${x1} ${y1} C ${x1 + dx / 2} ${y1}, ${x1 + dx / 2} ${y2}, ${x2} ${y2}`;
+                    } else {
+                        d = `M ${x1} ${y1} C ${x1} ${y1 + dy / 2}, ${x2} ${y1 + dy / 2}, ${x2} ${y2}`;
+                    }
+
+                    path.setAttribute('d', d);
+                    path.setAttribute('class', 'eer-line-path');
+                    path.setAttribute('data-from', rel.from);
+                    path.setAttribute('data-to', rel.to);
+                    svg.appendChild(path);
+                }
+            });
+        }
+
+        // Run after layout and on changes
+        setTimeout(drawEERLines, 500);
+        window.addEventListener('resize', drawEERLines);
+
+        // Redraw when AOS animations might have shifted things
+        document.addEventListener('aos:in', drawEERLines);
     </script>
 </body>
 
