@@ -45,10 +45,8 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Swords className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-lg text-white hidden sm:block">DebateMS</span>
+              <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
+              <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 hidden sm:block">VIVAATHI</span>
             </Link>
 
             {/* Search Bar - Center */}
