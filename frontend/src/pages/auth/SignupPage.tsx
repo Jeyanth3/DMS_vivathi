@@ -79,7 +79,7 @@ export default function SignupPage() {
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-            <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-11 h-11 rounded-2xl shadow-xl" />
+            <img src="/logo.png" alt="VIVAATHI" className="w-11 h-11 rounded-2xl shadow-xl" />
             <span className="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">VIVAATHI</span>
           </Link>
           <h1 className="text-2xl font-bold text-white">Create your account</h1>

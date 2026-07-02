@@ -45,7 +45,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
+              <img src="/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
               <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 hidden sm:block">VIVAATHI</span>
             </Link>
 
