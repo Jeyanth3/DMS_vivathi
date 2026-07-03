@@ -14,6 +14,7 @@ export const authAPI = {
 
 // Users
 export const usersAPI = {
+  getAll: () => api.get<User[]>('/users'),
   getById: (id: number) => api.get<User>(`/users/${id}`),
   update: (id: number, data: Partial<User>) => api.put<User>(`/users/${id}`, data),
   searchDebaters: (query: string) => api.get<User[]>(`/users/debaters/search?query=${encodeURIComponent(query)}`),
