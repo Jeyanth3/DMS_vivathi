@@ -89,7 +89,12 @@ export default function SettingsPage() {
         language: form.language,
         privacyStatus: privacy,
       } as any);
+
+      // Update context with full server response, then patch the picture URL explicitly
+      // so the Navbar/Dashboard refresh immediately even if the API omits the large Base64
       updateUser(data);
+      if (profilePictureUrl) updateUser({ profilePictureUrl } as any);
+
       setAvatarFile(null); // clear pending file after successful save
       showToast('Profile updated successfully!', 'success');
     } catch (err: any) {
@@ -178,54 +183,67 @@ export default function SettingsPage() {
 
             {/* ── Profile Picture Upload ── */}
             <div>
-              <label className="text-sm text-gray-400 mb-2 block flex items-center gap-2">
+              <label className="text-sm text-gray-400 mb-3 block flex items-center gap-2">
                 <Camera className="w-4 h-4" /> Profile Picture
               </label>
-              <label
-                htmlFor="avatar-upload"
-                className="group relative flex flex-col items-center justify-center w-full cursor-pointer rounded-2xl border-2 border-dashed border-white/10 hover:border-blue-500/60 transition-all duration-200 overflow-hidden"
-                style={{ minHeight: '180px' }}
-              >
-                {/* Preview / placeholder */}
-                {avatarPreview ? (
-                  <img
-                    src={avatarPreview}
-                    alt="Avatar preview"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-2 py-8 text-gray-500">
-                    <Camera className="w-10 h-10" />
-                    <span className="text-sm">Click to upload a photo</span>
-                    <span className="text-xs">PNG, JPG, WEBP up to 5 MB</span>
+
+              <div className="flex items-center gap-5">
+                {/* Circle preview */}
+                <label
+                  htmlFor="avatar-upload"
+                  className="group relative flex-shrink-0 cursor-pointer"
+                >
+                  {/* Circle image */}
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 bg-gray-800">
+                    {avatarPreview ? (
+                      <img
+                        src={avatarPreview}
+                        alt="Avatar preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-600">
+                        <Camera className="w-8 h-8" />
+                      </div>
+                    )}
                   </div>
-                )}
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2 pointer-events-none">
-                  <Camera className="w-8 h-8 text-white" />
-                  <span className="text-sm text-white font-medium">
-                    {avatarPreview ? 'Change photo' : 'Upload photo'}
-                  </span>
+                  {/* Camera badge */}
+                  <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-blue-600 border-2 border-gray-900 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
+                    <Camera className="w-3.5 h-3.5 text-white" />
+                  </div>
+
+                  <input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    capture="user"
+                    className="sr-only"
+                    onChange={handleAvatarChange}
+                  />
+                </label>
+
+                {/* Right-side text / status */}
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-sm text-white font-medium">
+                    {avatarFile ? avatarFile.name : 'No photo selected'}
+                  </p>
+                  <p className="text-xs text-gray-500">PNG, JPG, WEBP up to 5 MB</p>
+                  {avatarFile ? (
+                    <p className="text-xs text-blue-400 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />
+                      Click <strong>Save Profile</strong> to apply
+                    </p>
+                  ) : (
+                    <label
+                      htmlFor="avatar-upload"
+                      className="text-xs text-blue-400 underline cursor-pointer hover:text-blue-300 transition-colors"
+                    >
+                      Choose a photo
+                    </label>
+                  )}
                 </div>
-
-                <input
-                  id="avatar-upload"
-                  type="file"
-                  accept="image/*"
-                  capture="user"
-                  className="sr-only"
-                  onChange={handleAvatarChange}
-                />
-              </label>
-
-              {/* Unsaved indicator */}
-              {avatarFile && (
-                <p className="mt-2 text-xs text-blue-400 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />
-                  New photo selected — click <strong>Save Profile</strong> to apply
-                </p>
-              )}
+              </div>
             </div>
 
             {user.role === 'JUDGE' && (
