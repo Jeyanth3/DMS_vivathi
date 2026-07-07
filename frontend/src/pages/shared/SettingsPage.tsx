@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Settings, Globe, Lock, Bell, User, Eye, EyeOff, Save, Loader2 } from 'lucide-react';
+import { Settings, Globe, Lock, Bell, User, Eye, EyeOff, Save, Loader2, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { usersAPI } from '../../api';
 import { useToast } from '../../components/common/Toast';
@@ -34,6 +34,19 @@ export default function SettingsPage() {
     language: user?.language || 'en',
   });
 
+  // Avatar file upload state
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>(user?.profilePictureUrl || '');
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    // Revoke previous object URL to avoid memory leaks
+    if (avatarPreview && avatarPreview.startsWith('blob:')) URL.revokeObjectURL(avatarPreview);
+    setAvatarPreview(URL.createObjectURL(file));
+  };
+
   // Privacy
   const [privacy, setPrivacy] = useState<'PUBLIC' | 'PRIVATE'>(user?.privacyStatus || 'PUBLIC');
 
@@ -54,18 +67,30 @@ export default function SettingsPage() {
     if (!user) return;
     setSaving(true);
     try {
+      // Convert the selected file to a Base64 data-URI, or fall back to the existing URL
+      let profilePictureUrl: string | undefined = form.profilePictureUrl || undefined;
+      if (avatarFile) {
+        profilePictureUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = () => reject(new Error('Failed to read image file'));
+          reader.readAsDataURL(avatarFile);
+        });
+      }
+
       const { data } = await usersAPI.update(user.id, {
         fullName: form.fullName,
         age: form.age ? parseInt(form.age) : undefined,
         bio: form.bio,
         location: form.location,
-        profilePictureUrl: form.profilePictureUrl || undefined,
+        profilePictureUrl,
         expertise: form.expertise || undefined,
         yearsOfExperience: form.yearsOfExperience ? parseInt(form.yearsOfExperience) : undefined,
         language: form.language,
         privacyStatus: privacy,
       } as any);
       updateUser(data);
+      setAvatarFile(null); // clear pending file after successful save
       showToast('Profile updated successfully!', 'success');
     } catch (err: any) {
       showToast(err.response?.data?.error || 'Failed to update profile', 'error');
@@ -152,11 +177,56 @@ export default function SettingsPage() {
                 className="input-field" placeholder="City, Country" />
             </div>
 
+            {/* ── Profile Picture Upload ── */}
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Profile Picture URL</label>
-              <input value={form.profilePictureUrl}
-                onChange={e => setForm(p => ({ ...p, profilePictureUrl: e.target.value }))}
-                className="input-field" placeholder="https://..." />
+              <label className="text-sm text-gray-400 mb-2 block flex items-center gap-2">
+                <Camera className="w-4 h-4" /> Profile Picture
+              </label>
+              <label
+                htmlFor="avatar-upload"
+                className="group relative flex flex-col items-center justify-center w-full cursor-pointer rounded-2xl border-2 border-dashed border-white/10 hover:border-blue-500/60 transition-all duration-200 overflow-hidden"
+                style={{ minHeight: '180px' }}
+              >
+                {/* Preview / placeholder */}
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar preview"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 py-8 text-gray-500">
+                    <Camera className="w-10 h-10" />
+                    <span className="text-sm">Click to upload a photo</span>
+                    <span className="text-xs">PNG, JPG, WEBP up to 5 MB</span>
+                  </div>
+                )}
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2 pointer-events-none">
+                  <Camera className="w-8 h-8 text-white" />
+                  <span className="text-sm text-white font-medium">
+                    {avatarPreview ? 'Change photo' : 'Upload photo'}
+                  </span>
+                </div>
+
+                <input
+                  id="avatar-upload"
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  className="sr-only"
+                  onChange={handleAvatarChange}
+                />
+              </label>
+
+              {/* Unsaved indicator */}
+              {avatarFile && (
+                <p className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />
+                  New photo selected — click <strong>Save Profile</strong> to apply
+                </p>
+              )}
             </div>
 
             {user.role === 'JUDGE' && (
