@@ -132,9 +132,8 @@ export default function SettingsPage() {
         <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide pb-1">
           {tabs.map(t => (
             <button key={t.key} onClick={() => setActiveTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
-                activeTab === t.key ? 'bg-blue-600 text-white' : 'glass text-gray-400 hover:text-white hover:bg-white/10'
-              }`}>
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${activeTab === t.key ? 'bg-blue-600 text-white' : 'glass text-gray-400 hover:text-white hover:bg-white/10'
+                }`}>
               <t.icon className="w-4 h-4" />{t.label}
             </button>
           ))}
@@ -253,11 +252,10 @@ export default function SettingsPage() {
               <div className="flex flex-wrap gap-2">
                 {LANGUAGES.map(l => (
                   <button key={l.code} onClick={() => setForm(p => ({ ...p, language: l.code }))}
-                    className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${
-                      form.language === l.code
+                    className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${form.language === l.code
                         ? 'bg-blue-600 border-blue-500 text-white'
                         : 'glass border-white/10 text-gray-400 hover:text-white'
-                    }`}>
+                      }`}>
                     {l.label}
                   </button>
                 ))}
@@ -279,9 +277,8 @@ export default function SettingsPage() {
             <div className="grid grid-cols-2 gap-4">
               {(['PUBLIC', 'PRIVATE'] as const).map(p => (
                 <button key={p} onClick={() => setPrivacy(p)}
-                  className={`p-4 rounded-xl border text-left transition-all ${
-                    privacy === p ? 'bg-blue-600/20 border-blue-500 text-white' : 'glass border-white/10 text-gray-400 hover:border-white/20'
-                  }`}>
+                  className={`p-4 rounded-xl border text-left transition-all ${privacy === p ? 'bg-blue-600/20 border-blue-500 text-white' : 'glass border-white/10 text-gray-400 hover:border-white/20'
+                    }`}>
                   {p === 'PUBLIC' ? (
                     <>
                       <Eye className="w-5 h-5 mb-2 text-blue-400" />
@@ -324,12 +321,10 @@ export default function SettingsPage() {
                 </div>
                 <button
                   onClick={() => setNotifPrefs(p => ({ ...p, [key]: !p[key as keyof typeof p] }))}
-                  className={`w-12 h-6 rounded-full transition-all duration-200 relative ${
-                    notifPrefs[key as keyof typeof notifPrefs] ? 'bg-blue-600' : 'bg-white/10'
-                  }`}>
-                  <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all duration-200 ${
-                    notifPrefs[key as keyof typeof notifPrefs] ? 'left-7' : 'left-1'
-                  }`} />
+                  className={`w-12 h-6 rounded-full transition-all duration-200 relative ${notifPrefs[key as keyof typeof notifPrefs] ? 'bg-blue-600' : 'bg-white/10'
+                    }`}>
+                  <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all duration-200 ${notifPrefs[key as keyof typeof notifPrefs] ? 'left-7' : 'left-1'
+                    }`} />
                 </button>
               </div>
             ))}

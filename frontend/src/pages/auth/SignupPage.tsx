@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, UserPlus, Swords } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, Swords, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../api';
 import { useToast } from '../../components/common/Toast';
@@ -28,10 +28,21 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
     role: selectedRole || 'DEBATER' as Role,
-    profilePictureUrl: '',
     expertise: '',
     yearsOfExperience: '',
   });
+
+  // Avatar file upload state
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>('');
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    if (avatarPreview.startsWith('blob:')) URL.revokeObjectURL(avatarPreview);
+    setAvatarPreview(URL.createObjectURL(file));
+  };
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
@@ -45,6 +56,17 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
+      // Convert selected avatar to Base64, or omit if none selected
+      let profilePictureUrl: string | undefined;
+      if (avatarFile) {
+        profilePictureUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = () => reject(new Error('Failed to read image'));
+          reader.readAsDataURL(avatarFile);
+        });
+      }
+
       const payload = {
         fullName: form.fullName,
         username: form.username,
@@ -54,7 +76,7 @@ export default function SignupPage() {
         email: form.email,
         password: form.password,
         role: form.role,
-        profilePictureUrl: form.profilePictureUrl || undefined,
+        profilePictureUrl,
         expertise: form.expertise || undefined,
         yearsOfExperience: form.yearsOfExperience ? parseInt(form.yearsOfExperience) : undefined,
       };
@@ -156,10 +178,56 @@ export default function SignupPage() {
               </div>
             )}
 
+            {/* ── Profile Picture Upload ── */}
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Profile Picture URL</label>
-              <input value={form.profilePictureUrl} onChange={e => set('profilePictureUrl', e.target.value)}
-                placeholder="https://example.com/photo.jpg" className="input-field" />
+              <label className="text-sm text-gray-400 mb-2 block flex items-center gap-2">
+                <Camera className="w-4 h-4" /> Profile Picture
+              </label>
+              <label
+                htmlFor="signup-avatar-upload"
+                className="group relative flex flex-col items-center justify-center w-full cursor-pointer rounded-2xl border-2 border-dashed border-white/10 hover:border-blue-500/60 transition-all duration-200 overflow-hidden"
+                style={{ minHeight: '160px' }}
+              >
+                {/* Preview / placeholder */}
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar preview"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 py-6 text-gray-500">
+                    <Camera className="w-9 h-9" />
+                    <span className="text-sm">Click to upload a photo</span>
+                    <span className="text-xs">PNG, JPG, WEBP (optional)</span>
+                  </div>
+                )}
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2 pointer-events-none">
+                  <Camera className="w-7 h-7 text-white" />
+                  <span className="text-sm text-white font-medium">
+                    {avatarPreview ? 'Change photo' : 'Upload photo'}
+                  </span>
+                </div>
+
+                <input
+                  id="signup-avatar-upload"
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  className="sr-only"
+                  onChange={handleAvatarChange}
+                />
+              </label>
+
+              {/* Selected file name */}
+              {avatarFile && (
+                <p className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />
+                  {avatarFile.name}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
