@@ -34,9 +34,19 @@ export default function SettingsPage() {
     language: user?.language || 'en',
   });
 
+  // Helper: turn a relative /api/... path into an absolute backend URL
+  const toAbsoluteAvatarUrl = (url: string | undefined) => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('blob:') || url.startsWith('data:')) return url;
+    const backendBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/api$/, '');
+    return `${backendBase}${url}`;
+  };
+
   // Avatar file upload state
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string>(user?.profilePictureUrl || '');
+  const [avatarPreview, setAvatarPreview] = useState<string>(
+    toAbsoluteAvatarUrl(user?.profilePictureUrl)
+  );
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,10 +82,15 @@ export default function SettingsPage() {
       // Upload image first via multipart — avoids Base64 size limits
       if (avatarFile) {
         const { data: updatedUser } = await usersAPI.uploadProfilePicture(user.id, avatarFile);
-        // Add cache-busting timestamp so the browser re-fetches after update
-        profilePictureUrl = updatedUser.profilePictureUrl
-          ? `${updatedUser.profilePictureUrl}?t=${Date.now()}`
-          : undefined;
+        if (updatedUser.profilePictureUrl) {
+          // Build an absolute URL so <img src> resolves against the backend, not the frontend
+          const backendBase = (import.meta.env.VITE_API_BASE_URL || '/api')
+            .replace(/\/api$/, ''); // strip trailing /api → get the root origin
+          const cacheBust = `?t=${Date.now()}`;
+          profilePictureUrl = updatedUser.profilePictureUrl.startsWith('http')
+            ? `${updatedUser.profilePictureUrl}${cacheBust}`
+            : `${backendBase}${updatedUser.profilePictureUrl}${cacheBust}`;
+        }
       }
 
       const { data } = await usersAPI.update(user.id, {
@@ -94,7 +109,7 @@ export default function SettingsPage() {
       updateUser(data);
       if (profilePictureUrl) {
         updateUser({ profilePictureUrl } as any);
-        setAvatarPreview(profilePictureUrl);
+        setAvatarPreview(profilePictureUrl); // now an absolute URL — won't show alt text
       }
 
       setAvatarFile(null);
