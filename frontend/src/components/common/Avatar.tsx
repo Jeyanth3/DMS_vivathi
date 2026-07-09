@@ -1,3 +1,5 @@
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
+
 interface Props {
   name: string;
   src?: string;
@@ -15,10 +17,11 @@ const sizes = {
 
 export default function Avatar({ name, src, size = 'md', className = '' }: Props) {
   const letter = name?.[0]?.toUpperCase() || '?';
+  const absoluteSrc = toAbsoluteAvatarUrl(src);
 
-  if (src) {
+  if (absoluteSrc) {
     return (
-      <img src={src} alt={name}
+      <img src={absoluteSrc} alt={name}
         className={`${sizes[size]} rounded-full object-cover border-2 border-white/20 ${className}`} />
     );
   }

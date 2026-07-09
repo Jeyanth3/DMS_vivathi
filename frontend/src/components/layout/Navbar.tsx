@@ -5,6 +5,7 @@ import {
   User, LayoutDashboard, ChevronDown, Menu, X, Swords
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
 import LogoutModal from '../common/LogoutModal';
 import SearchBar from '../common/SearchBar';
 
@@ -71,7 +72,7 @@ export default function Navbar() {
                     className="flex items-center gap-2 focus:outline-none"
                   >
                     {user.profilePictureUrl ? (
-                      <img src={user.profilePictureUrl} alt={user.fullName}
+                      <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName}
                         className="w-9 h-9 rounded-full object-cover border-2 border-blue-500/50" />
                     ) : (
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-sm font-bold text-white border-2 border-blue-500/50">

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { usersAPI } from '../../api';
 import { useToast } from '../../components/common/Toast';
 import Avatar from '../../components/common/Avatar';
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -33,14 +34,6 @@ export default function SettingsPage() {
     yearsOfExperience: user?.yearsOfExperience?.toString() || '',
     language: user?.language || 'en',
   });
-
-  // Helper: turn a relative /api/... path into an absolute backend URL
-  const toAbsoluteAvatarUrl = (url: string | undefined) => {
-    if (!url) return '';
-    if (url.startsWith('http') || url.startsWith('blob:') || url.startsWith('data:')) return url;
-    const backendBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/api$/, '');
-    return `${backendBase}${url}`;
-  };
 
   // Avatar file upload state
   const [avatarFile, setAvatarFile] = useState<File | null>(null);

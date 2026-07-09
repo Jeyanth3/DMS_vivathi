@@ -5,6 +5,7 @@ import EditProfileModal from './EditProfileModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { getNotificationRoute } from '../../utils/notificationRouting';
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
 import { notificationsAPI } from '../../api';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -53,7 +54,7 @@ export default function SharedProfileLayout({
                 )}
                 <div className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-4xl font-black text-white border-4 border-white/10 shadow-lg ${theme.shadow} mb-4`}>
                   {user.profilePictureUrl ? (
-                    <img src={user.profilePictureUrl} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
+                    <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
                   ) : user.fullName[0]?.toUpperCase()}
                 </div>
                 <h1 className="text-xl font-black text-white">{user.fullName}</h1>
