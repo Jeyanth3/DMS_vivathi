@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { MessageCircleMore, Paperclip, SendHorizonal, Search, Sparkles, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { usersAPI } from '../../api';
-import type { User } from '../../types';
+import { usersAPI, messagesAPI } from '../../api';
+import type { User, MessageDTO } from '../../types';
 
 type Message = {
   id: number;
@@ -18,8 +18,6 @@ type ChatThread = {
   updatedAt: string;
 };
 
-const STORAGE_KEY = 'dms_chat_threads';
-
 const getThreadId = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
 
 const getInitials = (name: string) =>
@@ -30,6 +28,32 @@ const getInitials = (name: string) =>
     .map((word) => word[0])
     .join('')
     .toUpperCase() || 'U';
+
+const groupMessagesIntoThreads = (currentUserId: number, dbMsgs: MessageDTO[]): ChatThread[] => {
+  const groups: { [counterpartId: number]: MessageDTO[] } = {};
+  for (const msg of dbMsgs) {
+    const counterpartId = msg.senderId === currentUserId ? msg.receiverId : msg.senderId;
+    if (!groups[counterpartId]) {
+      groups[counterpartId] = [];
+    }
+    groups[counterpartId].push(msg);
+  }
+  
+  return Object.entries(groups).map(([cIdStr, msgList]) => {
+    const counterpartId = Number(cIdStr);
+    return {
+      id: getThreadId(currentUserId, counterpartId),
+      participants: [currentUserId, counterpartId],
+      messages: msgList.map((m) => ({
+        id: m.id,
+        senderId: m.senderId,
+        text: m.text,
+        time: new Date(m.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+      })),
+      updatedAt: msgList[msgList.length - 1]?.createdAt || new Date().toISOString(),
+    };
+  });
+};
 
 export default function MessagesPage() {
   const { user } = useAuth();
@@ -53,13 +77,11 @@ export default function MessagesPage() {
       }
 
       try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const parsed = JSON.parse(stored) as ChatThread[];
-          setThreads(parsed);
-          if (parsed[0]) {
-            setActiveThreadId(parsed[0].id);
-          }
+        const { data: dbMsgs } = await messagesAPI.getMessages();
+        const loadedThreads = groupMessagesIntoThreads(user.id, dbMsgs || []);
+        setThreads(loadedThreads);
+        if (loadedThreads[0]) {
+          setActiveThreadId(loadedThreads[0].id);
         }
       } catch {
         setThreads([]);
@@ -118,37 +140,46 @@ export default function MessagesPage() {
       updatedAt: new Date().toISOString(),
     };
 
-    const updatedThreads = [newThread, ...threads];
-    setThreads(updatedThreads);
+    setThreads([newThread, ...threads]);
     setActiveThreadId(newThread.id);
     setSearchTerm('');
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedThreads));
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = draft.trim();
     if (!trimmed || !user || !activeThread) return;
 
-    const newMessage: Message = {
-      id: Date.now(),
-      senderId: user.id,
-      text: trimmed,
-      time: new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
-    };
+    const otherId = activeThread.participants.find((id) => id !== user.id);
+    if (!otherId) return;
 
-    const updatedThreads = threads.map((thread) =>
-      thread.id === activeThread.id
-        ? {
-            ...thread,
-            messages: [...thread.messages, newMessage],
-            updatedAt: new Date().toISOString(),
-          }
-        : thread
-    );
+    try {
+      const { data: sentMessage } = await messagesAPI.sendMessage({
+        receiverId: otherId,
+        text: trimmed
+      });
 
-    setThreads(updatedThreads);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedThreads));
-    setDraft('');
+      const newMessage: Message = {
+        id: sentMessage.id,
+        senderId: sentMessage.senderId,
+        text: sentMessage.text,
+        time: new Date(sentMessage.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+      };
+
+      const updatedThreads = threads.map((thread) =>
+        thread.id === activeThread.id
+          ? {
+              ...thread,
+              messages: [...thread.messages, newMessage],
+              updatedAt: sentMessage.createdAt,
+            }
+          : thread
+      );
+
+      setThreads(updatedThreads);
+      setDraft('');
+    } catch (err) {
+      console.error("Failed to send message", err);
+    }
   };
 
   if (!user) return null;

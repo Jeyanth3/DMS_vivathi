@@ -2,7 +2,7 @@ import api from './axios';
 import type {
   User, Tournament, Match, Notification, DiscussionComment,
   DebaterStats, NewsPost, CalendarEvent, SearchResult,
-  SchoolLeaderboardEntry, ScoreSheetTemplate
+  SchoolLeaderboardEntry, ScoreSheetTemplate, MessageDTO
 } from '../types';
 
 // Auth
@@ -97,3 +97,10 @@ export const newsAPI = {
   getAll: () => api.get<NewsPost[]>('/news'),
   create: (data: object) => api.post<NewsPost>('/news', data),
 };
+
+// Messages
+export const messagesAPI = {
+  getMessages: () => api.get<MessageDTO[]>('/messages'),
+  sendMessage: (data: { receiverId: number; text: string }) => api.post<MessageDTO>('/messages', data),
+};
+
