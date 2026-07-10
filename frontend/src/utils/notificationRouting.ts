@@ -34,6 +34,11 @@ export function getNotificationRoute(n: Notification): string | null {
     return '/notifications';
   }
 
-  // 4. Default fallback — go to notifications page
+  // 4. Handle Connection Requests
+  if (n.title === 'New Connection Request') {
+    return '/settings';
+  }
+
+  // 5. Default fallback — go to notifications page
   return '/notifications';
 }
