@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Trophy, Search, Bell, Calendar, Settings, LogOut,
-  User, LayoutDashboard, ChevronDown, Menu, X, Swords
+  User, LayoutDashboard, ChevronDown, Menu, X, Swords, MessageCircleMore
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
@@ -58,6 +58,7 @@ export default function Navbar() {
             {/* Nav Links */}
             <div className="hidden lg:flex items-center gap-6">
               <Link to="/" className="nav-link text-sm">Home</Link>
+              <Link to="/forum" className="nav-link text-sm">Forum</Link>
               <Link to="/scoring" className="nav-link text-sm">Scoring</Link>
               <Link to="/about" className="nav-link text-sm">About Us</Link>
               <Link to="/news" className="nav-link text-sm">News</Link>
@@ -103,6 +104,10 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
                         <Bell className="w-4 h-4" /> Notifications
                       </Link>
+                      <Link to="/messages" onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+                        <MessageCircleMore className="w-4 h-4" /> Messages
+                      </Link>
                       <Link to="/settings" onClick={() => setDropdownOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
                         <Settings className="w-4 h-4" /> Settings
@@ -142,6 +147,7 @@ export default function Navbar() {
               <SearchBar />
             </div>
             <Link to="/" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Home</Link>
+            <Link to="/forum" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Forum</Link>
             <Link to="/scoring" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Scoring</Link>
             <Link to="/about" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">About Us</Link>
             <Link to="/news" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">News</Link>
