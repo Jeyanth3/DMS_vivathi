@@ -63,7 +63,7 @@ export default function ProfilePage() {
       if (connectionStatus === 'NONE') {
         await connectionsAPI.sendRequest(parseInt(id));
         setConnectionStatus('PENDING_SENT');
-      } else if (connectionStatus === 'ACCEPTED') {
+      } else if (connectionStatus === 'ACCEPTED' || connectionStatus === 'PENDING_SENT') {
         await connectionsAPI.disconnect(parseInt(id));
         setConnectionStatus('NONE');
       }
@@ -97,14 +97,14 @@ export default function ProfilePage() {
         </button>
       )}
       {connectionStatus === 'PENDING_SENT' && (
-        <button disabled className="px-4 py-1.5 bg-gray-700 text-gray-300 rounded-lg text-sm font-semibold cursor-not-allowed">
-          Pending...
+        <button onClick={handleConnectAction} className="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-sm font-semibold transition-colors">
+          Cancel Request
         </button>
       )}
       {connectionStatus === 'PENDING_RECEIVED' && (
-        <button disabled className="px-4 py-1.5 bg-blue-600/50 text-blue-200 rounded-lg text-sm font-semibold cursor-not-allowed border border-blue-500/30">
-          Review Request
-        </button>
+        <Link to="/settings" className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-colors">
+          Review in Settings
+        </Link>
       )}
       {connectionStatus === 'ACCEPTED' && (
         <>

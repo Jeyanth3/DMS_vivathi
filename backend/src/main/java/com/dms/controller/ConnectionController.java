@@ -62,6 +62,11 @@ public class ConnectionController {
         return ResponseEntity.ok(connectionService.getConnections(principal.getName()));
     }
 
+    @GetMapping("/count/{userId}")
+    public ResponseEntity<Map<String, Long>> getConnectionCount(@PathVariable Long userId) {
+        return ResponseEntity.ok(Map.of("count", connectionService.getConnectionCount(userId)));
+    }
+
     @GetMapping("/blocked")
     public ResponseEntity<List<BlockDTO>> getBlockedUsers(Principal principal) {
         return ResponseEntity.ok(connectionService.getBlockedUsers(principal.getName()));

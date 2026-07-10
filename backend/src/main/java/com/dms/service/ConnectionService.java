@@ -160,6 +160,12 @@ public class ConnectionService {
                 .collect(Collectors.toList());
     }
 
+    public long getConnectionCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return connectionRepository.countAcceptedConnectionsForUser(user);
+    }
+
     public List<BlockDTO> getBlockedUsers(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));

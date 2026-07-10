@@ -121,6 +121,7 @@ export const connectionsAPI = {
   unblockUser: (userId: number) => api.delete(`/connections/unblock/${userId}`),
   getPendingRequests: () => api.get<import('../types').Connection[]>('/connections/pending'),
   getConnections: () => api.get<User[]>('/connections'),
+  getConnectionCount: (userId: number) => api.get<{ count: number }>(`/connections/count/${userId}`),
   getBlockedUsers: () => api.get<import('../types').Block[]>('/connections/blocked'),
   getConnectionStatus: (userId: number) => api.get<{ status: string }>(`/connections/status/${userId}`),
 };

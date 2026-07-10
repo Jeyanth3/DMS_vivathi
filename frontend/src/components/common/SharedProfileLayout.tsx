@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { MapPin, Mail, Calendar, Clock, ArrowRight, Pencil, Linkedin, Facebook, Twitter, Swords, Gavel, BarChart3 } from 'lucide-react';
 import type { User, Notification } from '../../types';
 import EditProfileModal from './EditProfileModal';
@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { getNotificationRoute } from '../../utils/notificationRouting';
 import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
-import { notificationsAPI } from '../../api';
+import { notificationsAPI, connectionsAPI } from '../../api';
 import LoadingSpinner from './LoadingSpinner';
 
 /* ── Role theme config ── */
@@ -38,6 +38,13 @@ export default function SharedProfileLayout({
   const theme = ROLE_THEME[user.role] ?? ROLE_THEME.DEBATER;
   const RoleIcon = theme.icon;
 
+  const [connectionsCount, setConnectionsCount] = useState(0);
+  useEffect(() => {
+    connectionsAPI.getConnectionCount(user.id)
+      .then(res => setConnectionsCount(res.data.count))
+      .catch(() => setConnectionsCount(0));
+  }, [user.id]);
+
   return (
     <div className="min-h-screen py-8 px-4 animate-fade-in">
       <div className="max-w-7xl mx-auto">
@@ -49,7 +56,6 @@ export default function SharedProfileLayout({
             <aside className="space-y-5">
               <div className="card text-center relative">
                 <div className="absolute top-4 right-4 flex items-center gap-2">
-                  {headerActions}
                   {!isReadOnly && (
                     <button onClick={() => setIsEditModalOpen(true)}
                       className="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Edit Profile">
@@ -69,7 +75,21 @@ export default function SharedProfileLayout({
                     <RoleIcon className="w-3.5 h-3.5" /> {theme.label}
                   </span>
                 </div>
+                
+                <div className="mt-4 flex items-center justify-center gap-6">
+                  <div className="text-center">
+                    <p className="font-bold text-white text-lg leading-none">{connectionsCount}</p>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Connections</p>
+                  </div>
+                </div>
+
                 {user.bio && <p className="text-gray-400 text-sm mt-4 leading-relaxed">{user.bio}</p>}
+                
+                {headerActions && (
+                  <div className="mt-5 flex items-center justify-center gap-3">
+                    {headerActions}
+                  </div>
+                )}
               </div>
 
               <div className="card space-y-3">
