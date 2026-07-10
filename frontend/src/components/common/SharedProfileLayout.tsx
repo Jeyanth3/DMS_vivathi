@@ -24,12 +24,14 @@ export interface SharedProfileLayoutProps {
   onNotificationsChange?: (updater: (prev: Notification[]) => Notification[]) => void;
   /** Role-specific sidebar extras (e.g. expertise badges, quick stats, create button) */
   sidebarExtra?: ReactNode;
+  /** Extra actions for the header (e.g. Connect/Block buttons) */
+  headerActions?: ReactNode;
   /** Role-specific right-column content (stats, charts, activity, tournaments) */
   children: ReactNode;
 }
 
 export default function SharedProfileLayout({
-  user, notifications, isReadOnly, loading, onNotificationsChange, sidebarExtra, children,
+  user, notifications, isReadOnly, loading, onNotificationsChange, sidebarExtra, headerActions, children,
 }: SharedProfileLayoutProps) {
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -46,12 +48,15 @@ export default function SharedProfileLayout({
             {/* ════ LEFT SIDEBAR ════ */}
             <aside className="space-y-5">
               <div className="card text-center relative">
-                {!isReadOnly && (
-                  <button onClick={() => setIsEditModalOpen(true)}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors cursor-pointer" title="Edit Profile">
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                )}
+                <div className="absolute top-4 right-4 flex items-center gap-2">
+                  {headerActions}
+                  {!isReadOnly && (
+                    <button onClick={() => setIsEditModalOpen(true)}
+                      className="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Edit Profile">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
                 <div className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-4xl font-black text-white border-4 border-white/10 shadow-lg ${theme.shadow} mb-4`}>
                   {user.profilePictureUrl ? (
                     <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
