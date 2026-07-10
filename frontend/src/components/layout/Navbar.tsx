@@ -62,16 +62,6 @@ export default function Navbar() {
               <Link to="/scoring" className="nav-link text-sm">Scoring</Link>
               <Link to="/about" className="nav-link text-sm">About Us</Link>
               <Link to="/news" className="nav-link text-sm">News</Link>
-              {isAuthenticated && user && (
-                <>
-                  <Link to={`/profile/${user.id}#diaries`} className="nav-link text-sm flex items-center gap-1 text-indigo-400 hover:text-indigo-300 font-semibold transition-all">
-                    <Award className="w-4 h-4" /> My Diaries
-                  </Link>
-                  <Link to="/messages" className="nav-link text-sm flex items-center gap-1 text-blue-400 hover:text-blue-300 font-semibold transition-all">
-                    <MessageCircleMore className="w-4 h-4" /> Messages
-                  </Link>
-                </>
-              )}
             </div>
 
             {/* Right: Auth */}
