@@ -82,7 +82,7 @@ export default function SearchBar() {
       </div>
 
       {open && query && (
-        <div className="absolute top-full left-0 right-0 mt-2 glass-dark rounded-2xl border border-white/10 shadow-2xl overflow-hidden z-50 animate-fade-in">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0f172a] rounded-2xl border border-white/10 shadow-2xl overflow-hidden z-[100] animate-fade-in">
           {loading && (
             <div className="flex items-center gap-2 px-4 py-3 text-gray-400 text-sm">
               <Loader2 className="w-4 h-4 animate-spin" /> Searching...

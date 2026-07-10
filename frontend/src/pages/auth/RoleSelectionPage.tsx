@@ -51,7 +51,7 @@ export default function RoleSelectionPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2.5 mb-6">
-            <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-12 h-12 rounded-2xl shadow-xl" />
+            <img src="/logo.png" alt="VIVAATHI" className="w-12 h-12 rounded-2xl shadow-xl" />
             <span className="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">VIVAATHI</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-3">

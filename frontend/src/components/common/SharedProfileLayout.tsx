@@ -1,11 +1,12 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { MapPin, Mail, Calendar, Clock, ArrowRight, Pencil, Linkedin, Facebook, Twitter, Swords, Gavel, BarChart3 } from 'lucide-react';
 import type { User, Notification } from '../../types';
 import EditProfileModal from './EditProfileModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { getNotificationRoute } from '../../utils/notificationRouting';
-import { notificationsAPI } from '../../api';
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
+import { notificationsAPI, connectionsAPI } from '../../api';
 import LoadingSpinner from './LoadingSpinner';
 import DiariesSection from './DiariesSection';
 
@@ -24,17 +25,26 @@ export interface SharedProfileLayoutProps {
   onNotificationsChange?: (updater: (prev: Notification[]) => Notification[]) => void;
   /** Role-specific sidebar extras (e.g. expertise badges, quick stats, create button) */
   sidebarExtra?: ReactNode;
+  /** Extra actions for the header (e.g. Connect/Block buttons) */
+  headerActions?: ReactNode;
   /** Role-specific right-column content (stats, charts, activity, tournaments) */
   children: ReactNode;
 }
 
 export default function SharedProfileLayout({
-  user, notifications, isReadOnly, loading, onNotificationsChange, sidebarExtra, children,
+  user, notifications, isReadOnly, loading, onNotificationsChange, sidebarExtra, headerActions, children,
 }: SharedProfileLayoutProps) {
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const theme = ROLE_THEME[user.role] ?? ROLE_THEME.DEBATER;
   const RoleIcon = theme.icon;
+
+  const [connectionsCount, setConnectionsCount] = useState(0);
+  useEffect(() => {
+    connectionsAPI.getConnectionCount(user.id)
+      .then(res => setConnectionsCount(res.data.count))
+      .catch(() => setConnectionsCount(0));
+  }, [user.id]);
 
   return (
     <div className="min-h-screen py-8 px-4 animate-fade-in">
@@ -46,15 +56,17 @@ export default function SharedProfileLayout({
             {/* ════ LEFT SIDEBAR ════ */}
             <aside className="space-y-5">
               <div className="card text-center relative">
-                {!isReadOnly && (
-                  <button onClick={() => setIsEditModalOpen(true)}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors cursor-pointer" title="Edit Profile">
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                )}
+                <div className="absolute top-4 right-4 flex items-center gap-2">
+                  {!isReadOnly && (
+                    <button onClick={() => setIsEditModalOpen(true)}
+                      className="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Edit Profile">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
                 <div className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-4xl font-black text-white border-4 border-white/10 shadow-lg ${theme.shadow} mb-4`}>
                   {user.profilePictureUrl ? (
-                    <img src={user.profilePictureUrl} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
+                    <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
                   ) : user.fullName[0]?.toUpperCase()}
                 </div>
                 <h1 className="text-xl font-black text-white">{user.fullName}</h1>
@@ -64,7 +76,21 @@ export default function SharedProfileLayout({
                     <RoleIcon className="w-3.5 h-3.5" /> {theme.label}
                   </span>
                 </div>
+                
+                <div className="mt-4 flex items-center justify-center gap-6">
+                  <div className="text-center">
+                    <p className="font-bold text-white text-lg leading-none">{connectionsCount}</p>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Connections</p>
+                  </div>
+                </div>
+
                 {user.bio && <p className="text-gray-400 text-sm mt-4 leading-relaxed">{user.bio}</p>}
+                
+                {headerActions && (
+                  <div className="mt-5 flex items-center justify-center gap-3">
+                    {headerActions}
+                  </div>
+                )}
               </div>
 
               <div className="card space-y-3">

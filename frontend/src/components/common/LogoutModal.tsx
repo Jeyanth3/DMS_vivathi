@@ -29,7 +29,7 @@ export default function LogoutModal({ isOpen, onClose }: Props) {
         </button>
 
         <div className="flex flex-col items-center text-center gap-4">
-          <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-16 h-16 rounded-2xl shadow-xl" />
+          <img src="/logo.png" alt="VIVAATHI" className="w-16 h-16 rounded-2xl shadow-xl" />
           <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
             <LogOut className="w-7 h-7 text-red-400" />
           </div>

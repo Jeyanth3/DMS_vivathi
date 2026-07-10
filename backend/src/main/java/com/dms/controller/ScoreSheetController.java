@@ -37,8 +37,10 @@ public class ScoreSheetController {
     }
 
     @PostMapping("/score-sheets/submit")
-    public ResponseEntity<ScoreSheetSubmission> submit(@RequestBody ScoreSheetSubmissionRequest req) {
-        return ResponseEntity.ok(scoreSheetService.submitScoreSheet(req));
+    public ResponseEntity<?> submit(@RequestBody ScoreSheetSubmissionRequest req,
+                                                        java.security.Principal principal) {
+        scoreSheetService.submitScoreSheet(req, principal.getName());
+        return ResponseEntity.ok(java.util.Map.of("message", "Score sheet submitted successfully"));
     }
 
     @PostMapping("/score-sheets/{id}/reopen")

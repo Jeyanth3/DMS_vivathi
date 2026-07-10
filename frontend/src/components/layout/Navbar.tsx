@@ -6,6 +6,7 @@ import {
   Award
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
 import LogoutModal from '../common/LogoutModal';
 import SearchBar from '../common/SearchBar';
 
@@ -46,7 +47,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
+              <img src="/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
               <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 hidden sm:block">VIVAATHI</span>
             </Link>
 
@@ -73,7 +74,7 @@ export default function Navbar() {
                     className="flex items-center gap-2 focus:outline-none"
                   >
                     {user.profilePictureUrl ? (
-                      <img src={user.profilePictureUrl} alt={user.fullName}
+                      <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName}
                         className="w-9 h-9 rounded-full object-cover border-2 border-blue-500/50" />
                     ) : (
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-sm font-bold text-white border-2 border-blue-500/50">

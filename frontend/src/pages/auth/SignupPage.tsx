@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, UserPlus, Swords } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, Swords, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { authAPI } from '../../api';
+import { authAPI, usersAPI } from '../../api';
+import { compressImageFile } from '../../utils/avatarUrl';
+
 import { useToast } from '../../components/common/Toast';
 import type { Role } from '../../types';
 
@@ -28,10 +30,21 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
     role: selectedRole || 'DEBATER' as Role,
-    profilePictureUrl: '',
     expertise: '',
     yearsOfExperience: '',
   });
+
+  // Avatar file upload state
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>('');
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    if (avatarPreview.startsWith('blob:')) URL.revokeObjectURL(avatarPreview);
+    setAvatarPreview(URL.createObjectURL(file));
+  };
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
@@ -54,12 +67,27 @@ export default function SignupPage() {
         email: form.email,
         password: form.password,
         role: form.role,
-        profilePictureUrl: form.profilePictureUrl || undefined,
         expertise: form.expertise || undefined,
         yearsOfExperience: form.yearsOfExperience ? parseInt(form.yearsOfExperience) : undefined,
       };
       const { data } = await authAPI.signup(payload);
-      login(data.token, data.user);
+
+      // Upload avatar after account is created using the real multipart endpoint
+      if (avatarFile && data.user?.id) {
+        try {
+          // Compress first so large wallpapers/photos don't exceed backend limits
+          const compressed = await compressImageFile(avatarFile);
+          const { data: updatedUser } = await usersAPI.uploadProfilePicture(data.user.id, compressed);
+          login(data.token, updatedUser);
+        } catch {
+          // Avatar upload failed — still log in, profile picture can be set later
+          login(data.token, data.user);
+        }
+      } else {
+        login(data.token, data.user);
+      }
+
+
       showToast('Account created successfully!', 'success');
       switch (data.user.role) {
         case 'DEBATER': navigate('/dashboard/debater'); break;
@@ -79,7 +107,7 @@ export default function SignupPage() {
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-            <img src="/src/assets/logo.png" alt="VIVAATHI" className="w-11 h-11 rounded-2xl shadow-xl" />
+            <img src="/logo.png" alt="VIVAATHI" className="w-11 h-11 rounded-2xl shadow-xl" />
             <span className="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">VIVAATHI</span>
           </Link>
           <h1 className="text-2xl font-bold text-white">Create your account</h1>
@@ -156,10 +184,63 @@ export default function SignupPage() {
               </div>
             )}
 
+            {/* ── Profile Picture Upload ── */}
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Profile Picture URL</label>
-              <input value={form.profilePictureUrl} onChange={e => set('profilePictureUrl', e.target.value)}
-                placeholder="https://example.com/photo.jpg" className="input-field" />
+              <label className="text-sm text-gray-400 mb-3 block flex items-center gap-2">
+                <Camera className="w-4 h-4" /> Profile Picture
+              </label>
+
+              <div className="flex items-center gap-5">
+                {/* Circle preview */}
+                <label
+                  htmlFor="signup-avatar-upload"
+                  className="group relative flex-shrink-0 cursor-pointer"
+                >
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/20 bg-gray-800">
+                    {avatarPreview ? (
+                      <img
+                        src={avatarPreview}
+                        alt="Avatar preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-600">
+                        <Camera className="w-7 h-7" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Camera badge */}
+                  <div className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-blue-600 border-2 border-gray-900 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
+                    <Camera className="w-3 h-3 text-white" />
+                  </div>
+
+                  <input
+                    id="signup-avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    capture="user"
+                    className="sr-only"
+                    onChange={handleAvatarChange}
+                  />
+                </label>
+
+                {/* Right-side text */}
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-sm text-white font-medium">
+                    {avatarFile ? avatarFile.name : 'No photo selected'}
+                  </p>
+                  <p className="text-xs text-gray-500">PNG, JPG, WEBP (optional)</p>
+                  {!avatarFile && (
+                    <label
+                      htmlFor="signup-avatar-upload"
+                      className="text-xs text-blue-400 underline cursor-pointer hover:text-blue-300 transition-colors"
+                    >
+                      Choose a photo
+                    </label>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">

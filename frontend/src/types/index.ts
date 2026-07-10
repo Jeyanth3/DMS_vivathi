@@ -169,6 +169,23 @@ export interface MessageDTO {
   createdAt: string;
 }
 
+export type ConnectionStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+
+export interface Connection {
+  id: number;
+  requester: User;
+  receiver: User;
+  status: ConnectionStatus;
+  createdAt: string;
+}
+
+export interface Block {
+  id: number;
+  blocker: User;
+  blocked: User;
+  createdAt: string;
+}
+
 export interface DiaryComment {
   id: number;
   postId: number;
@@ -198,4 +215,3 @@ export interface DiaryPost {
   isVerified: boolean;
   createdAt: string;
 }
-

@@ -32,7 +32,6 @@ logs/
 npm-debug.log*
 
 # Spring Boot
-backend/src/main/resources/application.properties
 
 # Env files
 .env

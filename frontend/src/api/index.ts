@@ -18,6 +18,13 @@ export const usersAPI = {
   getAll: () => api.get<User[]>('/users'),
   getById: (id: number) => api.get<User>(`/users/${id}`),
   update: (id: number, data: Partial<User>) => api.put<User>(`/users/${id}`, data),
+  uploadProfilePicture: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    // Do NOT set Content-Type manually — Axios sets multipart/form-data with the
+    // correct boundary automatically when the body is a FormData object.
+    return api.post<User>(`/users/${id}/profile-picture`, formData);
+  },
   searchDebaters: (query: string) => api.get<User[]>(`/users/debaters/search?query=${encodeURIComponent(query)}`),
   searchJudges: (query: string) => api.get<User[]>(`/users/judges/search?query=${encodeURIComponent(query)}`),
   getTopDebaters: () => api.get<DebaterStats[]>('/users/top-debaters'),
@@ -103,6 +110,21 @@ export const newsAPI = {
 export const messagesAPI = {
   getMessages: () => api.get<MessageDTO[]>('/messages'),
   sendMessage: (data: { receiverId: number; text: string }) => api.post<MessageDTO>('/messages', data),
+};
+
+// Connections & Blocking
+export const connectionsAPI = {
+  sendRequest: (userId: number) => api.post(`/connections/request/${userId}`),
+  acceptRequest: (connectionId: number) => api.put(`/connections/accept/${connectionId}`),
+  rejectRequest: (connectionId: number) => api.delete(`/connections/reject/${connectionId}`),
+  disconnect: (userId: number) => api.delete(`/connections/disconnect/${userId}`),
+  blockUser: (userId: number) => api.post(`/connections/block/${userId}`),
+  unblockUser: (userId: number) => api.delete(`/connections/unblock/${userId}`),
+  getPendingRequests: () => api.get<import('../types').Connection[]>('/connections/pending'),
+  getConnections: () => api.get<User[]>('/connections'),
+  getConnectionCount: (userId: number) => api.get<{ count: number }>(`/connections/count/${userId}`),
+  getBlockedUsers: () => api.get<import('../types').Block[]>('/connections/blocked'),
+  getConnectionStatus: (userId: number) => api.get<{ status: string }>(`/connections/status/${userId}`),
 };
 
 // Diaries
