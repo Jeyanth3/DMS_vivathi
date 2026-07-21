@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, Globe, Lightbulb, Mail, MapPin, Phone, Send, Target } from 'lucide-react';
+import { Target, Lightbulb, Globe, Mail, CheckCircle, Send, MapPin, Phone } from 'lucide-react';
 import { useToast } from '../../components/common/Toast';
 
 export default function AboutUsPage() {
@@ -11,55 +11,56 @@ export default function AboutUsPage() {
     e.preventDefault();
     setSending(true);
     await new Promise(r => setTimeout(r, 1000));
-    showToast('Message sent! We will get back to you soon.', 'success');
+    showToast('Message sent! We\'ll get back to you soon.', 'success');
     setForm({ name: '', email: '', subject: '', message: '' });
     setSending(false);
   };
 
   return (
-    <div className="min-h-screen py-16">
-      <div className="editorial-shell">
-        <header className="max-w-3xl mb-14">
-          <p className="eyebrow text-slate-500 mb-4">About VIVAATHI</p>
-          <h1 className="font-display text-5xl sm:text-6xl font-bold text-[#06192b] leading-tight">
-            Infrastructure for the next generation of competitive debate.
-          </h1>
-          <p className="text-slate-600 text-lg leading-8 mt-6">
-            VIVAATHI brings tournament setup, live scoring, participant records, and debate community features into one clean operating system.
+    <div className="min-h-screen py-16 px-4">
+      <div className="max-w-5xl mx-auto">
+        {/* Hero */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-4">About VIVAATHI</h1>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Building the infrastructure for the next generation of competitive debate.
           </p>
-        </header>
+        </div>
 
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-14">
+        {/* Mission */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
           {[
             {
               icon: Target,
               title: 'Our Mission',
-              content: 'Remove the friction of tournament management so organizers and speakers can focus on sharper argumentation.',
+              color: 'from-blue-500 to-cyan-500',
+              content: 'To democratize access to structured debate competitions by providing an all-in-one digital platform that removes the friction of tournament management, scoring, and tracking — so organizers can focus on what matters: great debates.',
             },
             {
               icon: Lightbulb,
               title: 'Why We Started',
-              content: 'Manual score sheets, scattered messages, and spreadsheet chaos made strong competitions harder to run than they needed to be.',
+              color: 'from-violet-500 to-purple-500',
+              content: 'Managing debate tournaments manually was chaotic — spreadsheets, paper score sheets, WhatsApp chains. We believed debaters deserved better. VIVAATHI was born to bring the same digital sophistication to debate that exists in other competitive sports.',
             },
             {
               icon: Globe,
               title: 'What We Do',
-              content: 'From registration to final verdicts, VIVAATHI gives every role a focused workspace and a shared record of the tournament.',
+              color: 'from-emerald-500 to-teal-500',
+              content: 'From tournament creation to final results, VIVAATHI handles everything. Organizers create tournaments, judges submit digital score sheets, and debaters track their progress — all in real time, all in one place.',
             },
-          ].map((item, index) => (
-            <article key={item.title} className={`paper-panel p-8 ${index === 1 ? 'bg-[#06192b] text-white border-[#06192b]' : ''}`}>
-              <div className={`w-12 h-12 border flex items-center justify-center mb-8 ${
-                index === 1 ? 'bg-[#102a43] border-white/15 text-[#fff0bd]' : 'bg-[#eef5ff] border-slate-300 text-[#06192b]'
-              }`}>
-                <item.icon className="w-6 h-6" />
+          ].map(item => (
+            <div key={item.title} className="card">
+              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4 shadow-lg`}>
+                <item.icon className="w-6 h-6 text-white" />
               </div>
-              <h3 className={`font-display text-2xl font-bold ${index === 1 ? 'text-white' : 'text-[#06192b]'}`}>{item.title}</h3>
-              <p className={`text-sm leading-7 mt-4 ${index === 1 ? 'text-slate-300' : 'text-slate-600'}`}>{item.content}</p>
-            </article>
+              <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">{item.content}</p>
+            </div>
           ))}
-        </section>
+        </div>
 
-        <section className="paper-panel p-8 mb-14">
+        {/* Stats */}
+        <div className="card border-blue-500/20 bg-gradient-to-br from-blue-600/5 to-violet-600/5 mb-16">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {[
               { value: '500+', label: 'Tournaments Managed' },
@@ -67,16 +68,17 @@ export default function AboutUsPage() {
               { value: '50+', label: 'Institutions' },
               { value: '98%', label: 'Satisfaction Rate' },
             ].map(s => (
-              <div key={s.label} className="border-r border-slate-300 last:border-0">
-                <p className="font-display text-4xl font-bold text-[#8a6a00]">{s.value}</p>
-                <p className="eyebrow text-slate-500 mt-2">{s.label}</p>
+              <div key={s.label}>
+                <p className="text-3xl font-black gradient-text">{s.value}</p>
+                <p className="text-gray-400 text-sm mt-1">{s.label}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section className="mb-14">
-          <h2 className="font-display text-3xl font-bold text-[#06192b] mb-6">What We Stand For</h2>
+        {/* Values */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">What We Stand For</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               'Transparent and fair scoring for every debater',
@@ -86,69 +88,72 @@ export default function AboutUsPage() {
               'Real-time data and analytics for performance improvement',
               'Community-driven growth and knowledge sharing',
             ].map(v => (
-              <div key={v} className="paper-panel bg-[#eef5ff] flex items-start gap-3 p-4">
-                <CheckCircle className="w-5 h-5 text-[#8a6a00] flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-700">{v}</p>
+              <div key={v} className="flex items-start gap-3 glass rounded-xl p-4">
+                <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-gray-300">{v}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section className="grid grid-cols-1 lg:grid-cols-[0.8fr_1fr] gap-8" id="contact">
+        {/* Contact */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" id="contact">
+          {/* Contact Info */}
           <div>
-            <p className="eyebrow text-slate-500 mb-3">Contact</p>
-            <h2 className="font-display text-3xl font-bold text-[#06192b] mb-6">Get In Touch</h2>
-            <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-white mb-6">Get In Touch</h2>
+            <div className="space-y-4 mb-8">
               {[
                 { icon: Mail, label: 'Email', value: 'support@vivaathi.com' },
                 { icon: MapPin, label: 'Location', value: 'Colombo, Sri Lanka' },
                 { icon: Phone, label: 'Phone', value: '+94 11 234 5678' },
               ].map(c => (
-                <div key={c.label} className="paper-panel flex items-center gap-3 p-4">
-                  <div className="w-10 h-10 bg-[#eef5ff] border border-slate-300 flex items-center justify-center">
-                    <c.icon className="w-5 h-5 text-[#06192b]" />
+                <div key={c.label} className="flex items-center gap-3 glass rounded-xl p-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                    <c.icon className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <p className="eyebrow text-slate-500">{c.label}</p>
-                    <p className="text-sm font-bold text-[#06192b]">{c.value}</p>
+                    <p className="text-xs text-gray-500">{c.label}</p>
+                    <p className="text-sm font-medium text-white">{c.value}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="paper-panel p-7">
-            <h3 className="font-display text-2xl font-bold text-[#06192b] mb-5">Send a Message</h3>
+          {/* Contact Form */}
+          <div className="card">
+            <h3 className="font-bold text-white mb-4">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="eyebrow text-slate-500 mb-1 block">Name</label>
+                  <label className="text-xs text-gray-400 mb-1 block">Name</label>
                   <input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                     required placeholder="Your name" className="input-field text-sm" />
                 </div>
                 <div>
-                  <label className="eyebrow text-slate-500 mb-1 block">Email</label>
+                  <label className="text-xs text-gray-400 mb-1 block">Email</label>
                   <input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
                     required placeholder="your@email.com" className="input-field text-sm" />
                 </div>
               </div>
               <div>
-                <label className="eyebrow text-slate-500 mb-1 block">Subject</label>
+                <label className="text-xs text-gray-400 mb-1 block">Subject</label>
                 <input value={form.subject} onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
                   required placeholder="How can we help?" className="input-field text-sm" />
               </div>
               <div>
-                <label className="eyebrow text-slate-500 mb-1 block">Message</label>
+                <label className="text-xs text-gray-400 mb-1 block">Message</label>
                 <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                   required rows={5} placeholder="Tell us more..." className="input-field text-sm resize-none" />
               </div>
-              <button type="submit" disabled={sending} className="btn-primary w-full">
+              <button type="submit" disabled={sending}
+                className="btn-primary w-full flex items-center justify-center gap-2">
                 <Send className="w-4 h-4" />
                 {sending ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );
