@@ -1,11 +1,24 @@
-import { useState } from 'react';
-import { CheckCircle, Globe, Lightbulb, Mail, MapPin, Phone, Send, Target } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { CheckCircle, Globe, Lightbulb, Mail, MapPin, Phone, Send, Target, HelpCircle } from 'lucide-react';
 import { useToast } from '../../components/common/Toast';
 
 export default function AboutUsPage() {
   const { showToast } = useToast();
+  const location = useLocation();
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
+    }
+  }, [location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +28,25 @@ export default function AboutUsPage() {
     setForm({ name: '', email: '', subject: '', message: '' });
     setSending(false);
   };
+
+  const faqs = [
+    {
+      q: 'How do I register my tournament on VIVAATHI?',
+      a: 'Sign up as an Organizer, navigate to your dashboard, and click "Create Tournament" to launch your event with full schedule and scoring tools.'
+    },
+    {
+      q: 'How are judge score sheets collected and verified?',
+      a: 'Judges receive digital score sheets in their dashboard during assigned rounds. Submissions are instantly validated and locked upon submission.'
+    },
+    {
+      q: 'Can debaters track their individual speaker points over time?',
+      a: 'Yes, debater profiles maintain a history of speaker scores, tournament placements, and personal debate diaries across all events.'
+    },
+    {
+      q: 'Who can I contact for support during a live tournament?',
+      a: 'Our support team is available via the contact form below or directly through support@vivaathi.com for urgent technical assistance.'
+    }
+  ];
 
   return (
     <div className="min-h-screen py-16">
@@ -94,7 +126,29 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-[0.8fr_1fr] gap-8" id="contact">
+        {/* FAQ Section */}
+        <section id="faq" className="mb-14 scroll-mt-24">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-9 h-9 bg-[#eef5ff] border border-slate-300 flex items-center justify-center text-[#06192b]">
+              <HelpCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="eyebrow text-slate-500">Support & Answers</p>
+              <h2 className="font-display text-3xl font-bold text-[#06192b]">Frequently Asked Questions</h2>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {faqs.map(faq => (
+              <div key={faq.q} className="paper-panel p-6">
+                <h3 className="font-display text-lg font-bold text-[#06192b] mb-2">{faq.q}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="grid grid-cols-1 lg:grid-cols-[0.8fr_1fr] gap-8 scroll-mt-24">
           <div>
             <p className="eyebrow text-slate-500 mb-3">Contact</p>
             <h2 className="font-display text-3xl font-bold text-[#06192b] mb-6">Get In Touch</h2>
@@ -153,3 +207,4 @@ export default function AboutUsPage() {
     </div>
   );
 }
+
