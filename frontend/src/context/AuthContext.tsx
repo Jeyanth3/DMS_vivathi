@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { User, Role } from '../types';
+import SessionChangedModal from '../components/common/SessionChangedModal';
 
 interface AuthContextValue {
   user: User | null;
@@ -29,6 +30,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [selectedRole, setSelectedRoleState] = useState<Role | null>(() =>
     (localStorage.getItem('dms_selected_role') as Role) || null
   );
+
+  const [sessionModal, setSessionModal] = useState<{
+    isOpen: boolean;
+    newUsername?: string;
+    isLoggedOut?: boolean;
+  }>({ isOpen: false });
 
   const login = useCallback((tok: string, usr: User) => {
     localStorage.setItem('dms_token', tok);
@@ -60,6 +67,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  // Listen for storage changes across tabs
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'dms_token' || e.key === 'dms_user' || e.key === 'dms_selected_role') {
+        const newToken = localStorage.getItem('dms_token');
+        let newUser: User | null = null;
+        try {
+          const storedUser = localStorage.getItem('dms_user');
+          newUser = storedUser ? JSON.parse(storedUser) : null;
+        } catch {
+          newUser = null;
+        }
+        const newRole = (localStorage.getItem('dms_selected_role') as Role) || null;
+
+        // Check if user changed or logged out
+        const hasTokenChanged = newToken !== token;
+        const hasUserChanged = newUser?.id !== user?.id;
+
+        // Update state in current tab
+        setToken(newToken);
+        setUser(newUser);
+        setSelectedRoleState(newRole);
+
+        if (hasTokenChanged || hasUserChanged) {
+          if (!newToken || !newUser) {
+            setSessionModal({ isOpen: true, isLoggedOut: true });
+          } else {
+            setSessionModal({
+              isOpen: true,
+              newUsername: newUser.username || newUser.fullName,
+              isLoggedOut: false,
+            });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [token, user]);
+
   return (
     <AuthContext.Provider value={{
       user, token, selectedRole,
@@ -67,6 +115,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login, logout, setSelectedRole, updateUser,
     }}>
       {children}
+      <SessionChangedModal
+        isOpen={sessionModal.isOpen}
+        newUsername={sessionModal.newUsername}
+        isLoggedOut={sessionModal.isLoggedOut}
+        onClose={() => setSessionModal({ isOpen: false })}
+      />
     </AuthContext.Provider>
   );
 }
@@ -76,3 +130,4 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+
