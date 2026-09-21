@@ -6,6 +6,7 @@ import com.dms.dto.ScoreSheetSubmissionRequest;
 import com.dms.service.ScoreSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,6 +19,7 @@ public class ScoreSheetController {
     private final ScoreSheetService scoreSheetService;
 
     @PostMapping("/score-templates")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<ScoreSheetTemplate> saveTemplate(@RequestBody Map<String, Object> body) {
         Long tournamentId = Long.parseLong(body.get("tournamentId").toString());
         String name = (String) body.get("name");
@@ -44,6 +46,7 @@ public class ScoreSheetController {
     }
 
     @PostMapping("/score-sheets/{id}/reopen")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<String> reopen(@PathVariable Long id) {
         scoreSheetService.reopenScoreSheet(id);
         return ResponseEntity.ok("Score sheet reopened");

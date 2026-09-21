@@ -4,6 +4,7 @@ import com.dms.dto.*;
 import com.dms.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class MatchController {
     private final MatchService matchService;
 
     @PostMapping("/matches")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<MatchDTO> createMatch(@RequestBody CreateMatchRequest req) {
         return ResponseEntity.ok(matchService.createMatch(req));
     }
@@ -31,6 +33,7 @@ public class MatchController {
     }
 
     @PostMapping("/tournaments/{id}/generate-next-round")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<String> generateNextRound(@PathVariable Long id) {
         matchService.generateNextRound(id);
         return ResponseEntity.ok("Next round generated successfully");
