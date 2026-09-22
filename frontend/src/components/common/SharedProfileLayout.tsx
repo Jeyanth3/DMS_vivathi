@@ -131,7 +131,15 @@ export default function SharedProfileLayout({
               {!isReadOnly && notifications.length > 0 && (
                 <div className="card">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Notifications</h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Notifications</h3>
+                      {notifications.some(n => !n.readStatus) && (
+                        <span className="flex h-2 w-2 relative">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </span>
+                      )}
+                    </div>
                     <Link to="/notifications" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
                       View all <ArrowRight className="w-3 h-3" />
                     </Link>

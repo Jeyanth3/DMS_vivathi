@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Bell, Calendar, Settings, LogOut,
   User, LayoutDashboard, ChevronDown, Menu, X, Swords, MessageCircleMore,
@@ -9,13 +9,16 @@ import { useAuth } from '../../context/AuthContext';
 import { toAbsoluteAvatarUrl } from '../../utils/avatarUrl';
 import LogoutModal from '../common/LogoutModal';
 import SearchBar from '../common/SearchBar';
+import { notificationsAPI } from '../../api';
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,6 +30,21 @@ export default function Navbar() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      setUnreadCount(0);
+      return;
+    }
+    const fetchUnread = () => {
+      notificationsAPI.getUnreadCount()
+        .then(res => setUnreadCount(res.data.count))
+        .catch(() => setUnreadCount(0));
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 10000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated, user, location.pathname]);
 
   const getDashboardPath = () => {
     if (!user) return '/';
@@ -74,65 +92,86 @@ export default function Navbar() {
 
             <div className="flex items-center gap-4">
               {isAuthenticated && user ? (
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-2 focus:outline-none"
+                <div className="flex items-center gap-3">
+                  {/* Quick Notification Bell Icon */}
+                  <Link
+                    to="/notifications"
+                    className="relative p-2.5 text-slate-700 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300 flex items-center justify-center"
+                    title="Notifications"
                   >
-                    {user.profilePictureUrl ? (
-                      <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName}
-                        className="w-10 h-10 rounded-none object-cover border border-[#06192b]" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-none bg-[#06192b] flex items-center justify-center text-sm font-bold text-white border border-[#06192b]">
-                        {avatarLetter}
+                    <Bell className="w-4 h-4" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
+                      </span>
+                    )}
+                  </Link>
+
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className="flex items-center gap-2 focus:outline-none relative"
+                    >
+                      <div className="relative">
+                        {user.profilePictureUrl ? (
+                          <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName}
+                            className="w-10 h-10 rounded-none object-cover border border-[#06192b]" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-none bg-[#06192b] flex items-center justify-center text-sm font-bold text-white border border-[#06192b]">
+                            {avatarLetter}
+                          </div>
+                        )}
+                        {unreadCount > 0 && (
+                          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border border-white"></span>
+                          </span>
+                        )}
+                      </div>
+                      <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {dropdownOpen && (
+                      <div className="absolute right-0 mt-3 w-60 z-[100] bg-white shadow-2xl border border-slate-300 py-2 animate-fade-in">
+                        <div className="px-4 py-3 border-b border-slate-200">
+                          <p className="text-sm font-bold text-[#06192b] truncate">{user.fullName}</p>
+                          <p className="text-xs text-slate-500">@{user.username}</p>
+                          <span className="mt-2 badge bg-[#eef5ff] text-[#06192b] border-slate-300">
+                            {user.role}
+                          </span>
+                        </div>
+
+                        <Link to={`/profile/${user.id}#diaries`} onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
+                          <Award className="w-4 h-4 text-[#8a6a00]" /> My Diaries
+                        </Link>
+                        <Link to={getDashboardPath()} onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
+                          <LayoutDashboard className="w-4 h-4" /> Dashboard
+                        </Link>
+                        <Link to="/calendar" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
+                          <Calendar className="w-4 h-4" /> Calendar
+                        </Link>
+                        <Link to="/messages" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
+                          <MessageCircleMore className="w-4 h-4" /> Messages
+                        </Link>
+                        <Link to="/settings" onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
+                          <Settings className="w-4 h-4" /> Settings
+                        </Link>
+                        <div className="border-t border-slate-200 mt-1 pt-1">
+                          <button
+                            onClick={() => { setDropdownOpen(false); setLogoutModal(true); }}
+                            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-700 hover:text-red-800 hover:bg-red-50 transition-colors">
+                            <LogOut className="w-4 h-4" /> Log Out
+                          </button>
+                        </div>
                       </div>
                     )}
-                    <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-60 z-[100] bg-white shadow-2xl border border-slate-300 py-2 animate-fade-in">
-                      <div className="px-4 py-3 border-b border-slate-200">
-                        <p className="text-sm font-bold text-[#06192b] truncate">{user.fullName}</p>
-                        <p className="text-xs text-slate-500">@{user.username}</p>
-                        <span className="mt-2 badge bg-[#eef5ff] text-[#06192b] border-slate-300">
-                          {user.role}
-                        </span>
-                      </div>
-
-                      <Link to={`/profile/${user.id}#diaries`} onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <Award className="w-4 h-4 text-[#8a6a00]" /> My Diaries
-                      </Link>
-                      <Link to={getDashboardPath()} onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <LayoutDashboard className="w-4 h-4" /> Dashboard
-                      </Link>
-                      <Link to="/calendar" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <Calendar className="w-4 h-4" /> Calendar
-                      </Link>
-                      <Link to="/notifications" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <Bell className="w-4 h-4" /> Notifications
-                      </Link>
-                      <Link to="/messages" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <MessageCircleMore className="w-4 h-4" /> Messages
-                      </Link>
-                      <Link to="/settings" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors">
-                        <Settings className="w-4 h-4" /> Settings
-                      </Link>
-                      <div className="border-t border-slate-200 mt-1 pt-1">
-                        <button
-                          onClick={() => { setDropdownOpen(false); setLogoutModal(true); }}
-                          className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-700 hover:text-red-800 hover:bg-red-50 transition-colors">
-                          <LogOut className="w-4 h-4" /> Log Out
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 <Link to="/role-select"
@@ -143,8 +182,14 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300">
+                className="lg:hidden p-2 text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300 relative">
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border border-white"></span>
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -163,6 +208,16 @@ export default function Navbar() {
             ))}
             {isAuthenticated && user && (
               <>
+                <Link to="/notifications" onClick={() => setMobileOpen(false)} className="flex items-center justify-between text-[#06192b] py-2 font-semibold">
+                  <span className="flex items-center gap-2">
+                    <Bell className="w-4 h-4" /> Notifications
+                  </span>
+                  {unreadCount > 0 && (
+                    <span className="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">
+                      {unreadCount} new
+                    </span>
+                  )}
+                </Link>
                 <Link to={`/profile/${user.id}#diaries`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-[#8a6a00] py-2 font-semibold">
                   <Award className="w-4 h-4" /> My Diaries
                 </Link>

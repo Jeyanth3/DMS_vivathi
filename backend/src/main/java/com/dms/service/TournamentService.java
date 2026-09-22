@@ -58,6 +58,9 @@ public class TournamentService {
                         }
                         schoolDebaterRepository.save(SchoolDebater.builder()
                                 .school(school).debater(debater).build());
+                        notificationService.send(debater,
+                                "Tournament Assigned",
+                                "You have been registered for tournament '" + tournament.getName() + "' under school '" + school.getName() + "' organised by " + organizer.getFullName() + ".");
                     }
                 }
             }
@@ -72,6 +75,9 @@ public class TournamentService {
                 String judgeCode = String.format("JUDGE-%03d", count++);
                 tournamentJudgeRepository.save(TournamentJudge.builder()
                         .tournament(tournament).judge(judge).judgeCode(judgeCode).build());
+                notificationService.send(judge,
+                        "Tournament Judge Assignment",
+                        "You have been assigned as a judge for tournament '" + tournament.getName() + "' organised by " + organizer.getFullName() + ".");
             }
         }
 
@@ -152,6 +158,9 @@ public class TournamentService {
 
         TournamentJudge tj = tournamentJudgeRepository.save(
                 TournamentJudge.builder().tournament(tournament).judge(judge).judgeCode(judgeCode).build());
+        notificationService.send(judge,
+                "Tournament Judge Assignment",
+                "You have been assigned as a judge for tournament '" + tournament.getName() + "' organised by " + tournament.getOrganizer().getFullName() + ".");
         return TournamentJudgeDTO.from(tj);
     }
 
