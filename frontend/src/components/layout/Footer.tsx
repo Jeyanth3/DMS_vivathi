@@ -1,12 +1,7 @@
 import { useState } from 'react';
-<<<<<<< HEAD
-import { Link } from 'react-router-dom';
-import { Swords, Twitter, Github, Linkedin, Instagram, Mail, Send } from 'lucide-react';
-=======
 import { Link, useLocation } from 'react-router-dom';
 import { Twitter, Github, Linkedin, Instagram, Mail, Send, Loader2 } from 'lucide-react';
 import { newsletterAPI } from '../../api';
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -80,11 +75,6 @@ export default function Footer() {
               The premier platform for managing debate tournaments, tracking scores, and building the next generation of great debaters.
             </p>
             <div className="flex items-center gap-3">
-<<<<<<< HEAD
-              {[Twitter, Github, Linkedin, Instagram].map((Icon, i) => (
-                <button key={i}
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200">
-=======
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
@@ -94,7 +84,6 @@ export default function Footer() {
                   aria-label={label}
                   className="w-9 h-9 border border-slate-300 flex items-center justify-center text-slate-500 hover:text-[#06192b] hover:bg-[#eef5ff] transition-all duration-200"
                 >
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -108,12 +97,8 @@ export default function Footer() {
               {quickLinks.map(link => (
                 <li key={link.label}>
                   <Link to={link.to}
-<<<<<<< HEAD
-                    className="text-gray-400 hover:text-white text-sm transition-colors">
-=======
                     onClick={handleQuickLinkClick}
                     className="text-slate-600 hover:text-[#06192b] text-sm transition-colors">
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                     {link.label}
                   </Link>
                 </li>
@@ -128,12 +113,8 @@ export default function Footer() {
               {supportLinks.map(link => (
                 <li key={link.label}>
                   <Link to={link.to}
-<<<<<<< HEAD
-                    className="text-gray-400 hover:text-white text-sm transition-colors">
-=======
                     onClick={() => handleSupportLinkClick(link.hash)}
                     className="text-slate-600 hover:text-[#06192b] text-sm transition-colors">
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                     {link.label}
                   </Link>
                 </li>
@@ -154,13 +135,8 @@ export default function Footer() {
               Get the latest tournament news and debate tips delivered to your inbox.
             </p>
             {subscribed ? (
-<<<<<<< HEAD
-              <div className="glass rounded-xl px-4 py-3 text-green-400 text-sm">
-                ✓ You're subscribed! Thanks.
-=======
               <div className="glass px-4 py-3 text-emerald-800 border border-emerald-300 text-sm font-medium bg-emerald-50">
                 {message || 'You are subscribed. Thanks!'}
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-2">

@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import { Target, Lightbulb, Globe, Mail, CheckCircle, Send, MapPin, Phone } from 'lucide-react';
-=======
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CheckCircle, Globe, Lightbulb, Mail, MapPin, Phone, Send, Target, HelpCircle } from 'lucide-react';
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
 import { useToast } from '../../components/common/Toast';
 
 export default function AboutUsPage() {
@@ -133,11 +128,6 @@ export default function AboutUsPage() {
           </div>
         </div>
 
-<<<<<<< HEAD
-        {/* Contact */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" id="contact">
-          {/* Contact Info */}
-=======
         {/* FAQ Section */}
         <section id="faq" className="mb-14 scroll-mt-24">
           <div className="flex items-center gap-3 mb-6">
@@ -161,7 +151,6 @@ export default function AboutUsPage() {
 
         {/* Contact Section */}
         <section id="contact" className="grid grid-cols-1 lg:grid-cols-[0.8fr_1fr] gap-8 scroll-mt-24">
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
           <div>
             <h2 className="text-2xl font-bold text-white mb-6">Get In Touch</h2>
             <div className="space-y-4 mb-8">
@@ -216,7 +205,7 @@ export default function AboutUsPage() {
               </button>
             </form>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

@@ -1,9 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-<<<<<<< HEAD
-import { Link, useNavigate } from 'react-router-dom';
-=======
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
 import {
   Trophy, Search, Bell, Calendar, Settings, LogOut,
   User, LayoutDashboard, ChevronDown, Menu, X, Swords, MessageCircleMore,
@@ -97,62 +93,6 @@ export default function Navbar() {
                     className="relative p-2.5 text-slate-700 hover:text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300 flex items-center justify-center"
                     title="Notifications"
                   >
-<<<<<<< HEAD
-                    {user.profilePictureUrl ? (
-                      <img src={toAbsoluteAvatarUrl(user.profilePictureUrl)} alt={user.fullName}
-                        className="w-9 h-9 rounded-full object-cover border-2 border-blue-500/50" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-sm font-bold text-white border-2 border-blue-500/50">
-                        {avatarLetter}
-                      </div>
-                    )}
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 z-[100] bg-gray-900 glass-dark rounded-2xl shadow-2xl border border-white/10 py-2 animate-fade-in">
-                      <div className="px-4 py-3 border-b border-white/10">
-                        <p className="text-sm font-semibold text-white truncate">{user.fullName}</p>
-                        <p className="text-xs text-gray-400">@{user.username}</p>
-                        <span className="mt-1 inline-block text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                          {user.role}
-                        </span>
-                      </div>
-
-                      <Link to={`/profile/${user.id}#diaries`} onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <Award className="w-4 h-4 text-indigo-400" /> My Diaries
-                      </Link>
-                      <Link to={getDashboardPath()} onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <LayoutDashboard className="w-4 h-4" /> Dashboard
-                      </Link>
-                      <Link to="/calendar" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <Calendar className="w-4 h-4" /> Calendar
-                      </Link>
-                      <Link to="/notifications" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <Bell className="w-4 h-4" /> Notifications
-                      </Link>
-                      <Link to="/messages" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <MessageCircleMore className="w-4 h-4" /> Messages
-                      </Link>
-                      <Link to="/settings" onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                        <Settings className="w-4 h-4" /> Settings
-                      </Link>
-                      <div className="border-t border-white/10 mt-1 pt-1">
-                        <button
-                          onClick={() => { setDropdownOpen(false); setLogoutModal(true); }}
-                          className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
-                          <LogOut className="w-4 h-4" /> Log Out
-                        </button>
-                      </div>
-                    </div>
-                  )}
-=======
                     <Bell className="w-4 h-4" />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 flex h-3 w-3">
@@ -226,7 +166,6 @@ export default function Navbar() {
                       </div>
                     )}
                   </div>
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                 </div>
               ) : (
                 <Link to="/role-select"
@@ -239,11 +178,7 @@ export default function Navbar() {
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-<<<<<<< HEAD
-                className="lg:hidden p-2 text-gray-400 hover:text-white transition-colors">
-=======
                 className="lg:hidden p-2 text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300 relative">
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
@@ -269,9 +204,6 @@ export default function Navbar() {
             <Link to="/news" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">News</Link>
             {isAuthenticated && user && (
               <>
-<<<<<<< HEAD
-                <Link to={`/profile/${user.id}#diaries`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 py-2 font-semibold">
-=======
                 <Link to="/notifications" onClick={() => setMobileOpen(false)} className="flex items-center justify-between text-[#06192b] py-2 font-semibold">
                   <span className="flex items-center gap-2">
                     <Bell className="w-4 h-4" /> Notifications
@@ -283,7 +215,6 @@ export default function Navbar() {
                   )}
                 </Link>
                 <Link to={`/profile/${user.id}#diaries`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-[#8a6a00] py-2 font-semibold">
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                   <Award className="w-4 h-4" /> My Diaries
                 </Link>
                 <Link to="/messages" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-blue-400 hover:text-blue-300 py-2 font-semibold">
