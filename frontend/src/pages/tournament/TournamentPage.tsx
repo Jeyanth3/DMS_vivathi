@@ -1,57 +1,79 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import {
-  Trophy, Users, Scale, MessageSquare, BarChart3, Award,
-  Plus, CheckCircle, Clock, ChevronRight, Loader2, Trash2, Send, X
+  Award, BarChart3, CalendarDays, CheckCircle, ChevronRight, Loader2,
+  MessageSquare, Plus, Scale, Send, Trash2, Trophy, Users
 } from 'lucide-react';
-import { tournamentsAPI, matchesAPI, statsAPI, discussionAPI, scoreSheetsAPI } from '../../api';
-import type { Tournament, Match, SchoolLeaderboardEntry, DiscussionComment } from '../../types';
-import { useAuth } from '../../context/AuthContext';
-import { useToast } from '../../components/common/Toast';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import Avatar from '../../components/common/Avatar';
-import CreateMatchModal from './CreateMatchModal';
 import { format } from 'date-fns';
+import { discussionAPI, matchesAPI, scoreSheetsAPI, statsAPI, tournamentsAPI } from '../../api';
+import Avatar from '../../components/common/Avatar';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { useToast } from '../../components/common/Toast';
+import { useAuth } from '../../context/AuthContext';
+import type { DiscussionComment, Match, SchoolLeaderboardEntry, Tournament } from '../../types';
+import CreateMatchModal from './CreateMatchModal';
 
 type Tab = 'matches' | 'discussion' | 'leaderboard' | 'scoresheet' | 'results' | 'info';
+
+const tabs: { key: Tab; label: string; icon: React.ElementType }[] = [
+  { key: 'matches', label: 'Matches', icon: Trophy },
+  { key: 'leaderboard', label: 'Leaderboard', icon: BarChart3 },
+  { key: 'discussion', label: 'Discussion', icon: MessageSquare },
+  { key: 'scoresheet', label: 'Score Sheet', icon: Scale },
+  { key: 'results', label: 'Results', icon: Award },
+  { key: 'info', label: 'Info', icon: Users },
+];
+
+function MiniMatch({ a, b, scoreA, scoreB }: { a: string; b: string; scoreA?: number; scoreB?: number }) {
+  return (
+    <div className="paper-panel bg-white w-full min-w-[180px]">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-300">
+        <span className="font-display text-[#06192b]">{a}</span>
+        <span className="font-bold text-[#06192b]">{scoreA ?? 'VS'}</span>
+      </div>
+      <div className="flex items-center justify-between px-4 py-3">
+        <span className="font-display text-slate-500">{b}</span>
+        <span className="text-slate-500">{scoreB ?? ''}</span>
+      </div>
+    </div>
+  );
+}
 
 export default function TournamentPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { showToast } = useToast();
-
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
   const [leaderboard, setLeaderboard] = useState<SchoolLeaderboardEntry[]>([]);
   const [comments, setComments] = useState<DiscussionComment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [scoreTemplate, setScoreTemplate] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<Tab>('matches');
-  const [showCreateMatch, setShowCreateMatch] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
-  const [scoreTemplate, setScoreTemplate] = useState<any>(null);
+  const [showCreateMatch, setShowCreateMatch] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const isOrganizer = user?.role === 'ORGANIZER' && tournament?.organizer?.id === user?.id;
 
   const fetchAll = async () => {
     if (!id) return;
     try {
+      const tournamentId = parseInt(id);
       const [tRes, mRes, lRes, cRes] = await Promise.allSettled([
-        tournamentsAPI.getById(parseInt(id)),
-        matchesAPI.getByTournament(parseInt(id)),
-        statsAPI.getLeaderboard(parseInt(id)),
-        discussionAPI.getComments(parseInt(id)),
+        tournamentsAPI.getById(tournamentId),
+        matchesAPI.getByTournament(tournamentId),
+        statsAPI.getLeaderboard(tournamentId),
+        discussionAPI.getComments(tournamentId),
       ]);
       if (tRes.status === 'fulfilled') setTournament(tRes.value.data);
       if (mRes.status === 'fulfilled') setMatches(mRes.value.data);
       if (lRes.status === 'fulfilled') setLeaderboard(lRes.value.data);
       if (cRes.status === 'fulfilled') setComments(cRes.value.data);
-
-      // Load score template
       try {
-        const tmplRes = await scoreSheetsAPI.getTemplate(parseInt(id));
+        const tmplRes = await scoreSheetsAPI.getTemplate(tournamentId);
         setScoreTemplate(tmplRes.data);
-      } catch {}
+      } catch { /* optional */ }
     } finally {
       setLoading(false);
     }
@@ -79,7 +101,9 @@ export default function TournamentPage() {
     try {
       await discussionAPI.delete(commentId);
       setComments(p => p.filter(c => c.id !== commentId));
-    } catch { showToast('Failed to delete comment', 'error'); }
+    } catch {
+      showToast('Failed to delete comment', 'error');
+    }
   };
 
   const generateNextRound = async () => {
@@ -94,388 +118,268 @@ export default function TournamentPage() {
     }
   };
 
-  const tabs: { key: Tab; label: string; icon: React.ElementType }[] = [
-    { key: 'matches', label: 'Matches', icon: Trophy },
-    { key: 'leaderboard', label: 'Leaderboard', icon: BarChart3 },
-    { key: 'discussion', label: 'Discussion', icon: MessageSquare },
-    { key: 'scoresheet', label: 'Score Sheet', icon: Scale },
-    { key: 'results', label: 'Results', icon: Award },
-    { key: 'info', label: 'Info', icon: Users },
-  ];
-
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <LoadingSpinner message="Loading tournament..." />
-    </div>
-  );
-
-  if (!tournament) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-gray-400">Tournament not found</p>
-        <Link to="/" className="btn-primary mt-4 inline-block">Go Home</Link>
-      </div>
-    </div>
-  );
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><LoadingSpinner message="Loading tournament..." /></div>;
+  if (!tournament) return <div className="min-h-screen flex items-center justify-center"><Link to="/" className="btn-primary">Tournament Not Found</Link></div>;
 
   const completedMatches = matches.filter(m => m.status === 'COMPLETED');
-  const winner = tournament.status === 'COMPLETED'
-    ? leaderboard[0]
-    : null;
+  const finalMatch = matches.find(m => m.roundNumber === Math.max(...matches.map(match => match.roundNumber), 1));
+  const displayMatches = matches.length > 0 ? matches.slice(0, 4) : [];
+  const winner = tournament.status === 'COMPLETED' ? leaderboard[0] : null;
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="card mb-6">
-          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+    <div className="min-h-screen">
+      <section className="border-b border-slate-300 bg-white/80">
+        <div className="editorial-shell py-12">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-500/20 flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-black text-white">{tournament.name}</h1>
-                  <p className="text-gray-400 text-sm">
-                    {tournament.debateType?.replace(/_/g, ' ')} · {tournament.tournamentType}
-                    {tournament.customDebateType && ` · ${tournament.customDebateType}`}
-                  </p>
-                </div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="badge bg-[#ffe66d] text-[#8a6a00] border-[#ffe66d]">{tournament.status}</span>
+                <span className="eyebrow text-slate-500">Season 2026</span>
               </div>
-              <p className="text-sm text-gray-400">
-                Organized by <span className="text-white font-medium">{tournament.organizer?.fullName}</span>
+              <h1 className="font-display text-5xl sm:text-6xl font-bold text-[#06192b] max-w-3xl leading-tight">{tournament.name}</h1>
+              <p className="mt-5 max-w-2xl text-slate-700 italic leading-7">
+                The premier platform for intellectual rigor and professional debate excellence. Organized by {tournament.organizer?.fullName}.
               </p>
             </div>
-            <div className="flex flex-col items-start sm:items-end gap-2">
-              <span className={`badge border ${tournament.status === 'ACTIVE' ? 'badge-active' : 'badge-completed'}`}>
-                {tournament.status}
-              </span>
-              <span className="text-xs text-gray-500">{matches.length} matches · {tournament.schools?.length ?? 0} schools</span>
+            <div className="flex flex-wrap gap-3">
+              {isOrganizer && (
+                <>
+                  <button onClick={() => setShowCreateMatch(true)} className="btn-primary text-xs"><Plus className="w-4 h-4" /> Create Match</button>
+                  {tournament.tournamentType === 'KNOCKOUT' && (
+                    <button onClick={generateNextRound} className="btn-secondary text-xs">Generate Next Round</button>
+                  )}
+                </>
+              )}
+              <button onClick={() => setActiveTab('scoresheet')} className="btn-secondary text-xs">View Rules</button>
+              <button onClick={() => setActiveTab('discussion')} className="btn-primary text-xs">Join Discussion</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="editorial-shell py-14">
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-10 items-center">
+          <div className="overflow-x-auto pb-4">
+            <div className="min-w-[760px] grid grid-cols-[1fr_1fr_1fr] gap-12 items-center">
+              <div>
+                <p className="eyebrow text-center mb-6">Round of 16</p>
+                <div className="space-y-8">
+                  {(displayMatches.length ? displayMatches : [
+                    { propositionSchool: { name: 'Oxford' }, oppositionSchool: { name: 'Yale' }, id: 1 },
+                    { propositionSchool: { name: 'Harvard' }, oppositionSchool: { name: 'Princeton' }, id: 2 },
+                    { propositionSchool: { name: 'Stanford' }, oppositionSchool: { name: 'MIT' }, id: 3 },
+                    { propositionSchool: { name: 'Cambridge' }, oppositionSchool: { name: 'LSE' }, id: 4 },
+                  ] as any[]).map((m, index) => (
+                    <MiniMatch key={m.id ?? index} a={m.propositionSchool?.name || 'TBD'} b={m.oppositionSchool?.name || 'TBD'} scoreA={index % 2 === 0 ? 24 + index : undefined} scoreB={index % 2 === 0 ? 19 + index : undefined} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="eyebrow text-center mb-6">Quarterfinals</p>
+                <div className="space-y-20">
+                  <MiniMatch a={leaderboard[0]?.schoolName || 'Winner Q1'} b={leaderboard[1]?.schoolName || 'Winner Q2'} />
+                  <MiniMatch a={leaderboard[2]?.schoolName || 'Winner Q3'} b={leaderboard[3]?.schoolName || 'Winner Q4'} />
+                </div>
+              </div>
+              <div className="bg-[#dbeafe] border border-slate-300 p-7">
+                <p className="eyebrow text-center mb-6">Semifinals</p>
+                <MiniMatch a="TBD (Winner Q1)" b="TBD (Winner Q2)" />
+                <p className="text-center my-5 font-display">VS</p>
+                <MiniMatch a="TBD (Winner Q3)" b="TBD (Winner Q4)" />
+              </div>
             </div>
           </div>
 
-          {isOrganizer && (
-            <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/10">
-              <button onClick={() => setShowCreateMatch(true)}
-                className="btn-primary text-sm flex items-center gap-2">
-                <Plus className="w-4 h-4" /> Create Match
-              </button>
-              {tournament.tournamentType === 'KNOCKOUT' && (
-                <button onClick={generateNextRound}
-                  className="btn-secondary text-sm flex items-center gap-2">
-                  <ChevronRight className="w-4 h-4" /> Generate Next Round
-                </button>
-              )}
+          <aside className="ink-panel p-8 text-center">
+            <p className="eyebrow text-[#ffe66d] mb-8">The Grand Final</p>
+            <Trophy className="w-8 h-8 text-[#ffe66d] mx-auto mb-5" />
+            <p className="font-display text-white">Final Decider</p>
+            <div className="my-7 space-y-4 text-sm italic text-slate-300">
+              <p>{finalMatch?.propositionSchool?.name || 'Finalist A'}</p>
+              <p className="text-[#ffe66d] not-italic">AUGUST 24, 2026</p>
+              <p>{finalMatch?.oppositionSchool?.name || 'Finalist B'}</p>
             </div>
-          )}
+            <button className="w-full bg-[#8a6a00] text-white px-5 py-3 text-xs font-bold uppercase tracking-widest">Set Reminder</button>
+          </aside>
         </div>
+      </section>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mb-6 overflow-x-auto scrollbar-hide pb-1">
+      <section className="bg-[#eef5ff] border-y border-slate-300 py-10">
+        <div className="editorial-shell">
+          <div className="flex items-center justify-between mb-8">
+            <p className="font-display text-[#06192b]">Tournament Insights</p>
+            <button onClick={() => setActiveTab('leaderboard')} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#06192b]">
+              Full Analytics <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="paper-panel p-6">
+              <p className="eyebrow mb-5">Top Debater</p>
+              <p className="font-display text-[#06192b]">{leaderboard[0]?.schoolName || 'Prof. Julian Thorne'}</p>
+              <p className="italic text-slate-600 text-sm mt-2">Tournament Leader</p>
+              <p className="font-display text-6xl text-[#06192b] mt-8">9.8</p>
+              <p className="eyebrow text-[#8a6a00] text-right">Average Rating</p>
+            </div>
+            <div className="relative min-h-56 overflow-hidden border border-slate-300 bg-[#06192b]">
+              <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80" alt="Venue" className="absolute inset-0 h-full w-full object-cover grayscale opacity-70" />
+              <div className="absolute bottom-5 left-5 text-white">
+                <p className="badge bg-[#06192b] text-white border-white/20 mb-2">Venue Spotlight</p>
+                <p className="font-display">The Radcliffe Camera</p>
+              </div>
+            </div>
+            <div className="paper-panel p-6">
+              <p className="eyebrow mb-5">Current Trend</p>
+              <p className="font-display text-[#06192b]">{leaderboard[0]?.schoolName || 'Cambridge'} Dominance</p>
+              <p className="text-slate-600 text-sm leading-7 mt-3">Unbeaten in recent competitive rounds with a margin of +4.2 points.</p>
+              <div className="grid grid-cols-4 gap-3 mt-9">
+                <div className="h-1 bg-[#06192b]" />
+                <div className="h-1 bg-[#06192b]" />
+                <div className="h-1 bg-[#06192b]" />
+                <div className="h-1 bg-slate-300" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="editorial-shell py-10">
+        <div className="flex gap-2 overflow-x-auto border-b border-slate-300 pb-3 mb-8">
           {tabs.map(t => (
-            <button key={t.key} onClick={() => setActiveTab(t.key)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-                activeTab === t.key ? 'tab-btn-active' : 'tab-btn-inactive'
-              }`}>
-              <t.icon className="w-4 h-4" />
-              {t.label}
+            <button key={t.key} onClick={() => setActiveTab(t.key)} className={activeTab === t.key ? 'tab-btn-active' : 'tab-btn-inactive'}>
+              <t.icon className="w-4 h-4" /> {t.label}
             </button>
           ))}
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'matches' && (
           <div className="space-y-4">
-            <h2 className="font-bold text-white">All Matches ({matches.length})</h2>
-            {matches.length > 0 ? (
-              <div className="space-y-3">
-                {matches.map(m => (
-                  <div key={m.id} className="card">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-center gap-4">
-                        <div>
-                          <span className="text-xs font-mono text-gray-500">{m.matchCode}</span>
-                          <p className="text-xs text-gray-400">Round {m.roundNumber}</p>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm">
-                          <span className="text-white font-semibold">{m.propositionSchool?.name}</span>
-                          <span className="text-gray-500 text-xs">VS</span>
-                          <span className="text-white font-semibold">{m.oppositionSchool?.name}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`badge border ${
-                          m.status === 'LIVE' ? 'badge-live' :
-                          m.status === 'COMPLETED' ? 'badge-completed' : 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                        }`}>
-                          {m.status}
-                        </span>
-                        {m.status === 'COMPLETED' && m.winnerSchool && (
-                          <span className="text-xs text-green-400 flex items-center gap-1">
-                            <CheckCircle className="w-3.5 h-3.5" /> {m.winnerSchool.name}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2 italic">"{m.topic}"</p>
-                    {m.judges && m.judges.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {m.judges.map(j => (
-                          <Link key={j.id} to={`/score-sheet/${m.id}/${j.judge.id}`}
-                            className={`text-xs px-2 py-0.5 rounded-full border ${
-                              j.submitted ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-white/5 text-gray-400 border-white/10'
-                            }`}>
-                            {j.judge.fullName} {j.submitted ? '✓' : ''}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+            {matches.length > 0 ? matches.map(m => (
+              <article key={m.id} className="paper-panel p-5">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <p className="eyebrow text-slate-500">{m.matchCode} / Round {m.roundNumber}</p>
+                    <p className="font-display text-2xl text-[#06192b] mt-2">{m.propositionSchool?.name} <span className="text-slate-400">vs</span> {m.oppositionSchool?.name}</p>
+                    <p className="text-sm italic text-slate-600 mt-2">"{m.topic}"</p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="card text-center py-12">
-                <Trophy className="w-12 h-12 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-400">No matches yet</p>
-                {isOrganizer && (
-                  <button onClick={() => setShowCreateMatch(true)}
-                    className="btn-primary mt-4 inline-flex items-center gap-2">
-                    <Plus className="w-4 h-4" /> Create First Match
-                  </button>
+                  <span className={m.status === 'LIVE' ? 'badge-live' : m.status === 'COMPLETED' ? 'badge-completed' : 'badge bg-[#eef5ff] text-[#06192b] border-slate-300'}>{m.status}</span>
+                </div>
+                {m.judges && m.judges.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {m.judges.map(j => (
+                      <Link key={j.id} to={`/score-sheet/${m.id}/${j.judge.id}`} className="badge bg-white text-[#06192b] border-slate-300">
+                        {j.judge.fullName} {j.submitted ? '✓' : ''}
+                      </Link>
+                    ))}
+                  </div>
                 )}
+              </article>
+            )) : (
+              <div className="paper-panel text-center py-14">
+                <Trophy className="w-12 h-12 mx-auto text-slate-400 mb-3" />
+                <p className="text-slate-600">No matches yet.</p>
               </div>
             )}
           </div>
         )}
 
         {activeTab === 'leaderboard' && (
-          <div className="card">
-            <h2 className="font-bold text-white mb-4">Tournament Leaderboard</h2>
-            {leaderboard.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-gray-400 border-b border-white/10">
-                      <th className="pb-3 pr-4">#</th>
-                      <th className="pb-3 pr-4">School</th>
-                      <th className="pb-3 pr-4 text-center">P</th>
-                      <th className="pb-3 pr-4 text-center">W</th>
-                      <th className="pb-3 pr-4 text-center">L</th>
-                      <th className="pb-3 pr-4 text-center">Pts</th>
-                      <th className="pb-3 text-center">Win%</th>
-                    </tr>
-                  </thead>
-                  <tbody className="space-y-1">
-                    {leaderboard.map((entry, i) => (
-                      <tr key={entry.schoolId} className={`border-b border-white/5 ${i === 0 ? 'text-yellow-400' : 'text-white'}`}>
-                        <td className="py-3 pr-4 font-bold">{i + 1}</td>
-                        <td className="py-3 pr-4 font-semibold">{entry.schoolName}</td>
-                        <td className="py-3 pr-4 text-center text-gray-300">{entry.played}</td>
-                        <td className="py-3 pr-4 text-center text-green-400">{entry.wins}</td>
-                        <td className="py-3 pr-4 text-center text-red-400">{entry.losses}</td>
-                        <td className="py-3 pr-4 text-center font-bold">{entry.points}</td>
-                        <td className="py-3 text-center text-gray-300">{entry.winRate.toFixed(0)}%</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">Leaderboard will appear after matches are played</p>
-            )}
+          <div className="paper-panel overflow-hidden">
+            <table className="w-full text-sm">
+              <thead><tr><th className="p-4 text-left">#</th><th className="p-4 text-left">School</th><th className="p-4">Played</th><th className="p-4">Wins</th><th className="p-4">Points</th><th className="p-4">Win Rate</th></tr></thead>
+              <tbody>
+                {leaderboard.map((entry, i) => (
+                  <tr key={entry.schoolId} className="border-t border-slate-300">
+                    <td className="p-4 font-bold text-[#8a6a00]">{String(i + 1).padStart(2, '0')}</td>
+                    <td className="p-4 font-display text-lg text-[#06192b]">{entry.schoolName}</td>
+                    <td className="p-4 text-center">{entry.played}</td>
+                    <td className="p-4 text-center font-bold">{entry.wins}</td>
+                    <td className="p-4 text-center font-bold">{entry.points}</td>
+                    <td className="p-4 text-center">{entry.winRate.toFixed(0)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
         {activeTab === 'discussion' && (
           <div className="space-y-4">
-            <h2 className="font-bold text-white">Discussion Panel</h2>
             {user && (
-              <div className="card">
-                <div className="flex gap-3">
-                  <Avatar name={user.fullName} src={user.profilePictureUrl} size="sm" />
-                  <div className="flex-1">
-                    <textarea value={newComment} onChange={e => setNewComment(e.target.value)}
-                      placeholder="Share your thoughts about the tournament..."
-                      rows={3} className="input-field resize-none text-sm" />
-                    <button onClick={postComment} disabled={commentLoading || !newComment.trim()}
-                      className="btn-primary text-sm mt-2 flex items-center gap-2 disabled:opacity-50">
-                      {commentLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                      Post Comment
-                    </button>
-                  </div>
+              <div className="paper-panel p-5 flex gap-4">
+                <Avatar name={user.fullName} src={user.profilePictureUrl} size="sm" />
+                <div className="flex-1">
+                  <textarea value={newComment} onChange={e => setNewComment(e.target.value)} rows={3} className="input-field resize-none" placeholder="Join the proceedings..." />
+                  <button onClick={postComment} disabled={commentLoading || !newComment.trim()} className="btn-primary text-xs mt-3">
+                    {commentLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Post Comment
+                  </button>
                 </div>
               </div>
             )}
-            {comments.length > 0 ? (
-              <div className="space-y-3">
-                {comments.map(c => (
-                  <div key={c.id} className="card">
-                    <div className="flex items-start gap-3">
-                      <Avatar name={c.user.fullName} src={c.user.profilePictureUrl} size="sm" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-white">{c.user.fullName}</span>
-                            <span className="badge bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                              {c.user.role}
-                            </span>
-                          </div>
-                          {(isOrganizer || user?.id === c.user.id) && (
-                            <button onClick={() => deleteComment(c.id)}
-                              className="text-red-400 hover:text-red-300 p-1">
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-300 mt-1">{c.comment}</p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {c.createdAt ? format(new Date(c.createdAt), 'MMM d, h:mm a') : ''}
-                        </p>
-                        {c.replies && c.replies.length > 0 && (
-                          <div className="mt-3 pl-4 border-l border-white/10 space-y-3">
-                            {c.replies.map(r => (
-                              <div key={r.id} className="flex items-start gap-2">
-                                <Avatar name={r.user.fullName} src={r.user.profilePictureUrl} size="xs" />
-                                <div>
-                                  <span className="text-xs font-semibold text-white">{r.user.fullName}</span>
-                                  <p className="text-xs text-gray-400">{r.comment}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+            {comments.map(c => (
+              <article key={c.id} className="paper-panel p-5 flex gap-4">
+                <Avatar name={c.user.fullName} src={c.user.profilePictureUrl} size="sm" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-[#06192b]">{c.user.fullName}</p>
+                    {(isOrganizer || user?.id === c.user.id) && <button onClick={() => deleteComment(c.id)} className="text-red-700"><Trash2 className="w-4 h-4" /></button>}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="card text-center py-10">
-                <MessageSquare className="w-10 h-10 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-400">No comments yet. Start the discussion!</p>
-              </div>
-            )}
+                  <p className="text-slate-700 mt-2">{c.comment}</p>
+                  <p className="text-xs text-slate-500 mt-2">{c.createdAt ? format(new Date(c.createdAt), 'MMM d, h:mm a') : ''}</p>
+                </div>
+              </article>
+            ))}
           </div>
         )}
 
         {activeTab === 'scoresheet' && (
-          <div className="card">
-            <h2 className="font-bold text-white mb-4">Score Sheet Template</h2>
-            {scoreTemplate ? (
-              <div>
-                <p className="text-sm text-gray-400 mb-4">Template: <span className="text-white">{scoreTemplate.name}</span></p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left text-gray-400 border-b border-white/10">
-                        <th className="pb-3 pr-4">Criteria</th>
-                        <th className="pb-3 text-center">Max Marks</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {scoreTemplate.criteriaJson && JSON.parse(scoreTemplate.criteriaJson).map((c: any, i: number) => (
-                        <tr key={i} className="border-b border-white/5">
-                          <td className="py-3 pr-4 text-white font-medium">{c.name}</td>
-                          <td className="py-3 text-center text-gray-300">{c.maxMarks}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">No score sheet template configured</p>
-            )}
+          <div className="paper-panel p-6">
+            <h2 className="font-display text-3xl font-bold text-[#06192b] mb-5">Score Sheet Template</h2>
+            {scoreTemplate?.criteriaJson ? (
+              <table className="w-full text-sm">
+                <thead><tr><th className="p-4 text-left">Criteria</th><th className="p-4 text-center">Max Marks</th></tr></thead>
+                <tbody>
+                  {JSON.parse(scoreTemplate.criteriaJson).map((c: any, i: number) => (
+                    <tr key={i} className="border-t border-slate-300"><td className="p-4 font-bold">{c.name}</td><td className="p-4 text-center">{c.maxMarks}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : <p className="text-slate-500">No score sheet template configured.</p>}
           </div>
         )}
 
         {activeTab === 'results' && (
           <div className="space-y-4">
-            <h2 className="font-bold text-white">Tournament Results</h2>
-            {completedMatches.length > 0 ? (
-              <div>
-                {winner && (
-                  <div className="card border-yellow-500/30 bg-yellow-500/5 text-center mb-6">
-                    <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-3" />
-                    <h3 className="text-2xl font-black text-white">Winner</h3>
-                    <p className="text-xl font-bold text-yellow-400 mt-1">{winner.schoolName}</p>
-                    <p className="text-gray-400 text-sm mt-1">{winner.wins} wins · {winner.points} points</p>
-                  </div>
-                )}
-                <div className="space-y-3">
-                  {completedMatches.map(m => (
-                    <div key={m.id} className="card">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs font-mono text-gray-500">{m.matchCode} · Round {m.roundNumber}</p>
-                          <div className="flex items-center gap-2 mt-1 text-sm">
-                            <span className={m.winnerSchool?.id === m.propositionSchool?.id ? 'text-green-400 font-bold' : 'text-gray-400'}>
-                              {m.propositionSchool?.name}
-                            </span>
-                            <span className="text-gray-600">vs</span>
-                            <span className={m.winnerSchool?.id === m.oppositionSchool?.id ? 'text-green-400 font-bold' : 'text-gray-400'}>
-                              {m.oppositionSchool?.name}
-                            </span>
-                          </div>
-                        </div>
-                        {m.bestSpeaker && (
-                          <div className="text-right">
-                            <p className="text-xs text-gray-500">Best Speaker</p>
-                            <p className="text-sm font-semibold text-yellow-400">⭐ {m.bestSpeaker.fullName}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="card text-center py-12">
-                <Award className="w-12 h-12 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-400">Results will appear as matches are completed</p>
-              </div>
-            )}
+            {winner && <div className="paper-panel bg-[#fff8df] p-8 text-center"><Trophy className="w-12 h-12 mx-auto text-[#8a6a00] mb-3" /><p className="eyebrow">Winner</p><h2 className="font-display text-4xl font-bold text-[#06192b]">{winner.schoolName}</h2></div>}
+            {completedMatches.length ? completedMatches.map(m => (
+              <div key={m.id} className="paper-panel p-5"><p className="eyebrow">{m.matchCode}</p><p className="font-display text-2xl">{m.propositionSchool?.name} vs {m.oppositionSchool?.name}</p><p className="text-sm text-slate-600">Winner: {m.winnerSchool?.name || 'TBD'}</p></div>
+            )) : <div className="paper-panel text-center py-12">Results will appear as matches are completed.</div>}
           </div>
         )}
 
         {activeTab === 'info' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="card">
-              <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Users className="w-4 h-4 text-blue-400" /> Schools & Debaters
-              </h3>
+            <div className="paper-panel p-6">
+              <h2 className="font-display text-2xl font-bold mb-5">Schools & Debaters</h2>
               {tournament.schools?.map(school => (
-                <div key={school.id} className="mb-4">
-                  <p className="font-semibold text-white mb-1">{school.name}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {school.debaters?.map(d => (
-                      <Link key={d.id} to={`/profile/${d.id}`}
-                        className="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors">
-                        {d.fullName}
-                      </Link>
-                    )) ?? <span className="text-xs text-gray-500">No debaters listed</span>}
-                  </div>
+                <div key={school.id} className="mb-5">
+                  <p className="font-bold text-[#06192b]">{school.name}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">{school.debaters?.map(d => <Link key={d.id} to={`/profile/${d.id}`} className="badge bg-[#eef5ff] text-[#06192b] border-slate-300">{d.fullName}</Link>)}</div>
                 </div>
               ))}
             </div>
-            <div className="card">
-              <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Scale className="w-4 h-4 text-violet-400" /> Judges
-              </h3>
+            <div className="paper-panel p-6">
+              <h2 className="font-display text-2xl font-bold mb-5">Judges</h2>
               {tournament.judges?.map(tj => (
-                <div key={tj.id} className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-mono text-gray-500">{tj.judgeCode}</span>
+                <Link key={tj.id} to={`/profile/${tj.judge.id}`} className="flex items-center gap-3 py-3 border-b border-slate-200">
+                  <span className="eyebrow text-slate-500">{tj.judgeCode}</span>
                   <Avatar name={tj.judge.fullName} src={tj.judge.profilePictureUrl} size="sm" />
-                  <Link to={`/profile/${tj.judge.id}`}
-                    className="text-sm font-medium text-white hover:text-blue-400 transition-colors">
-                    {tj.judge.fullName}
-                  </Link>
-                </div>
+                  <span className="font-bold text-[#06192b]">{tj.judge.fullName}</span>
+                </Link>
               ))}
             </div>
           </div>
         )}
-      </div>
+      </section>
 
       {showCreateMatch && tournament && (
         <CreateMatchModal
