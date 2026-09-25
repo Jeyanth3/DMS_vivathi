@@ -156,10 +156,9 @@ export default function CreateTournamentWizard() {
         <div className="flex items-center mb-8 overflow-x-auto scrollbar-hide pb-2">
           {steps.map((s, i) => (
             <div key={s} className="flex items-center flex-shrink-0">
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold border-2 transition-all ${
-                i + 1 < step ? 'bg-green-500 border-green-500 text-white' :
-                i + 1 === step ? 'bg-blue-600 border-blue-500 text-white' :
-                'border-white/20 text-gray-500'}`}>
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold border-2 transition-all ${i + 1 < step ? 'bg-green-500 border-green-500 text-white' :
+                  i + 1 === step ? 'bg-blue-600 border-blue-500 text-white' :
+                    'border-white/20 text-gray-500'}`}>
                 {i + 1 < step ? <Check className="w-4 h-4" /> : i + 1}
               </div>
               <span className={`ml-2 text-xs font-medium hidden sm:block ${i + 1 === step ? 'text-white' : 'text-gray-500'}`}>
@@ -188,11 +187,10 @@ export default function CreateTournamentWizard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {DEBATE_TYPES.map(dt => (
                     <button key={dt.value} onClick={() => setDebateType(dt.value)}
-                      className={`text-left px-4 py-3 rounded-xl border text-sm transition-all ${
-                        debateType === dt.value
+                      className={`text-left px-4 py-3 rounded-xl border text-sm transition-all ${debateType === dt.value
                           ? 'bg-blue-600/30 border-blue-500 text-white'
                           : 'glass border-white/10 text-gray-400 hover:text-white hover:border-white/20'
-                      }`}>
+                        }`}>
                       {dt.label}
                     </button>
                   ))}
@@ -218,11 +216,10 @@ export default function CreateTournamentWizard() {
                   { value: 'LEAGUE', title: 'League', desc: 'Round-robin style. All teams play multiple matches.' },
                 ].map(t => (
                   <button key={t.value} onClick={() => setTournamentType(t.value as any)}
-                    className={`p-4 rounded-xl border text-left transition-all ${
-                      tournamentType === t.value
+                    className={`p-4 rounded-xl border text-left transition-all ${tournamentType === t.value
                         ? 'bg-blue-600/20 border-blue-500 text-white'
                         : 'glass border-white/10 text-gray-400 hover:border-white/20'
-                    }`}>
+                      }`}>
                     <p className="font-bold text-base mb-1">{t.title}</p>
                     <p className="text-xs text-gray-400">{t.desc}</p>
                   </button>
