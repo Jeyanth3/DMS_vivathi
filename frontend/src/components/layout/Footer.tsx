@@ -1,21 +1,76 @@
 import { useState } from 'react';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import { Swords, Twitter, Github, Linkedin, Instagram, Mail, Send } from 'lucide-react';
+=======
+import { Link, useLocation } from 'react-router-dom';
+import { Twitter, Github, Linkedin, Instagram, Mail, Send, Loader2 } from 'lucide-react';
+import { newsletterAPI } from '../../api';
+>>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [message, setMessage] = useState('');
+  const [subscribing, setSubscribing] = useState(false);
+  const location = useLocation();
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) { setSubscribed(true); setEmail(''); }
+    if (!email || !email.trim()) return;
+
+    setSubscribing(true);
+    setMessage('');
+    try {
+      const res = await newsletterAPI.subscribe(email.trim());
+      setSubscribed(true);
+      setMessage(res.data.message || 'Subscribed successfully!');
+      setEmail('');
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.message || 'Failed to subscribe. Please try again.';
+      setMessage(errorMsg);
+    } finally {
+      setSubscribing(false);
+    }
   };
+
+  const handleQuickLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSupportLinkClick = (hash: string) => {
+    if (location.pathname === '/about') {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+  const socialLinks = [
+    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+  ];
+
+  const quickLinks = [
+    { label: 'Tournaments', to: '/' },
+    { label: 'Forums', to: '/forum' },
+    { label: 'Ranking', to: '/scoring' },
+    { label: 'About', to: '/about' },
+  ];
+
+  const supportLinks = [
+    { label: 'Contact Us', to: '/about#contact', hash: '#contact' },
+    { label: 'FAQ', to: '/about#faq', hash: '#faq' },
+  ];
 
   return (
     <footer className="border-t border-white/10 bg-gray-950/80 backdrop-blur-sm mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Column 1: Brand */}
+          {/* Column 1: Brand & Social Links */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl" />
@@ -25,11 +80,23 @@ export default function Footer() {
               The premier platform for managing debate tournaments, tracking scores, and building the next generation of great debaters.
             </p>
             <div className="flex items-center gap-3">
+<<<<<<< HEAD
               {[Twitter, Github, Linkedin, Instagram].map((Icon, i) => (
                 <button key={i}
                   className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200">
+=======
+              {socialLinks.map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-9 h-9 border border-slate-300 flex items-center justify-center text-slate-500 hover:text-[#06192b] hover:bg-[#eef5ff] transition-all duration-200"
+                >
+>>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                   <Icon className="w-4 h-4" />
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -38,16 +105,15 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2.5">
-              {[
-                { label: 'Home', to: '/' },
-                { label: 'Forum', to: '/forum' },
-                { label: 'Scoring', to: '/scoring' },
-                { label: 'News', to: '/news' },
-                { label: 'About Us', to: '/about' },
-              ].map(link => (
-                <li key={link.to}>
+              {quickLinks.map(link => (
+                <li key={link.label}>
                   <Link to={link.to}
+<<<<<<< HEAD
                     className="text-gray-400 hover:text-white text-sm transition-colors">
+=======
+                    onClick={handleQuickLinkClick}
+                    className="text-slate-600 hover:text-[#06192b] text-sm transition-colors">
+>>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                     {link.label}
                   </Link>
                 </li>
@@ -59,14 +125,15 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-white mb-4">Support</h4>
             <ul className="space-y-2.5">
-              {[
-                { label: 'Contact Us', to: '/about#contact' },
-                { label: 'FAQ', to: '/about#faq' },
-                { label: 'Privacy Policy', to: '/about#privacy' },
-              ].map(link => (
-                <li key={link.to}>
+              {supportLinks.map(link => (
+                <li key={link.label}>
                   <Link to={link.to}
+<<<<<<< HEAD
                     className="text-gray-400 hover:text-white text-sm transition-colors">
+=======
+                    onClick={() => handleSupportLinkClick(link.hash)}
+                    className="text-slate-600 hover:text-[#06192b] text-sm transition-colors">
+>>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
                     {link.label}
                   </Link>
                 </li>
@@ -87,8 +154,13 @@ export default function Footer() {
               Get the latest tournament news and debate tips delivered to your inbox.
             </p>
             {subscribed ? (
+<<<<<<< HEAD
               <div className="glass rounded-xl px-4 py-3 text-green-400 text-sm">
                 ✓ You're subscribed! Thanks.
+=======
+              <div className="glass px-4 py-3 text-emerald-800 border border-emerald-300 text-sm font-medium bg-emerald-50">
+                {message || 'You are subscribed. Thanks!'}
+>>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-2">
@@ -97,11 +169,27 @@ export default function Footer() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
+                  required
+                  disabled={subscribing}
                   className="input-field text-sm"
                 />
-                <button type="submit"
-                  className="w-full btn-primary text-sm flex items-center justify-center gap-2">
-                  <Send className="w-4 h-4" /> Subscribe
+                {message && !subscribed && (
+                  <p className="text-xs text-red-600">{message}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={subscribing}
+                  className="w-full btn-primary text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+                >
+                  {subscribing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Subscribing...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" /> Subscribe
+                    </>
+                  )}
                 </button>
               </form>
             )}

@@ -138,3 +138,9 @@ export const diariesAPI = {
   delete: (id: number) => api.delete(`/diaries/${id}`),
 };
 
+// Newsletter
+export const newsletterAPI = {
+  subscribe: (email: string) => api.post<{ message: string }>('/newsletter/subscribe', { email }),
+};
+
+

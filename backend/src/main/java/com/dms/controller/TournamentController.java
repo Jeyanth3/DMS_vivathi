@@ -5,6 +5,7 @@ import com.dms.service.TournamentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class TournamentController {
     private final TournamentService tournamentService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<TournamentDTO> create(@RequestBody CreateTournamentRequest req,
                                                 Authentication auth) {
         return ResponseEntity.ok(tournamentService.createTournament(req, auth.getName()));
@@ -39,12 +41,14 @@ public class TournamentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         tournamentService.deleteTournament(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/judges")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<TournamentJudgeDTO> addJudge(@PathVariable Long id,
                                                        @RequestBody Map<String, Long> body) {
         return ResponseEntity.ok(tournamentService.addJudge(id, body.get("judgeId")));
