@@ -35,22 +35,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< HEAD
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/news/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/search/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/tournaments/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/stats/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/diaries/user/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/diaries/*/share").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-=======
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,7 +51,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
->>>>>>> f344c79472462de7bd57a4a2007efe1ce1bb241d
 
         return http.build();
     }
