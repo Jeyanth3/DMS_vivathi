@@ -48,8 +48,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-[#06192b] hover:bg-[#102a43] font-bold uppercase tracking-widest px-5 py-3 rounded-none border border-[#06192b] transition-all duration-200 shadow-[0_10px_24px_rgba(6,25,43,0.12)] active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed;
-    color: #ffffff;
+    @apply inline-flex items-center justify-center gap-2 bg-[#06192b] hover:bg-[#102a43] text-white font-bold uppercase tracking-widest px-5 py-3 rounded-none border border-[#06192b] transition-all duration-200 shadow-[0_10px_24px_rgba(6,25,43,0.12)] active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
@@ -57,8 +56,7 @@
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 bg-red-700 hover:bg-red-800 font-bold uppercase tracking-widest px-5 py-3 rounded-none border border-red-800 transition-all duration-200;
-    color: #ffffff;
+    @apply inline-flex items-center justify-center gap-2 bg-red-700 hover:bg-red-800 text-white font-bold uppercase tracking-widest px-5 py-3 rounded-none border border-red-800 transition-all duration-200;
   }
 
   .input-field {
@@ -66,11 +64,11 @@
   }
 
   .card {
-    @apply bg-white/95 text-[#06192b] border border-slate-300 rounded-none p-6 transition-all duration-200;
+    @apply bg-[#06192b] text-white border border-[#102a43] rounded-none p-6 transition-all duration-200;
   }
 
   .card-hover {
-    @apply card hover:bg-[#f6f9ff] hover:border-[#06192b] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(6,25,43,0.08)] cursor-pointer;
+    @apply card hover:bg-[#102a43] hover:border-[#8a6a00] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(6,25,43,0.12)] cursor-pointer;
   }
 
   .badge {
@@ -133,8 +131,7 @@
   }
 
   .tab-btn-active {
-    @apply tab-btn bg-[#06192b] border-[#06192b];
-    color: #ffffff;
+    @apply tab-btn bg-[#06192b] text-white border-[#06192b];
   }
 
   .tab-btn-inactive {
@@ -154,8 +151,7 @@
   }
 
   .ink-panel {
-    @apply bg-[#06192b] border border-[#06192b];
-    color: #ffffff;
+    @apply bg-[#06192b] text-white border border-[#06192b];
   }
 }
 
@@ -173,102 +169,6 @@
   .animate-slide-up {
     animation: slideUp 0.4s ease-out;
   }
-
-  .editorial-rule {
-    @apply border-t border-slate-300;
-  }
-
-  .editorial-grid {
-    background-image: radial-gradient(circle at 1px 1px, rgba(6, 25, 43, 0.08) 1px, transparent 0);
-    background-size: 26px 26px;
-  }
-
-  .score-line {
-    @apply h-1 bg-[#06192b];
-  }
-}
-
-/* Complete UI harmonization layer.
-   Many older pages still use dark-theme Tailwind utilities directly. These
-   scoped overrides keep them readable and consistent with the VIVAATHI
-   editorial system without changing API logic. */
-.page-bg .card .text-white,
-.page-bg .paper-panel .text-white,
-.page-bg main .card .text-gray-100,
-.page-bg main .card .text-gray-200,
-.page-bg main .card .text-gray-300 {
-  color: #06192b !important;
-}
-
-.page-bg .card .text-gray-400,
-.page-bg .card .text-gray-500,
-.page-bg .card .text-gray-600,
-.page-bg .paper-panel .text-gray-400,
-.page-bg .paper-panel .text-gray-500,
-.page-bg .paper-panel .text-gray-600 {
-  color: #5f6b7a !important;
-}
-
-.page-bg .card .bg-white\/\[0\.02\],
-.page-bg .card .bg-white\/\[0\.03\],
-.page-bg .card .bg-white\/\[0\.04\],
-.page-bg .card .bg-white\/\[0\.05\],
-.page-bg .card .bg-white\/5,
-.page-bg .card .bg-white\/10,
-.page-bg .glass {
-  background-color: #f8fbff !important;
-  border-color: #c9d0dc !important;
-}
-
-.page-bg .card .border-white\/5,
-.page-bg .card .border-white\/10,
-.page-bg .card .border-white\/20,
-.page-bg .paper-panel .border-white\/10,
-.page-bg .glass {
-  border-color: #c9d0dc !important;
-}
-
-.page-bg .rounded-2xl,
-.page-bg .rounded-xl,
-.page-bg .rounded-lg {
-  border-radius: 0 !important;
-}
-
-.page-bg table {
-  border-collapse: collapse;
-}
-
-.page-bg thead tr {
-  background: #eef5ff;
-}
-
-.page-bg th {
-  color: #06192b !important;
-  font-family: Georgia, 'Times New Roman', serif;
-}
-
-.page-bg td,
-.page-bg th {
-  border-color: #c9d0dc !important;
-}
-
-.page-bg .ink-panel .text-white,
-.page-bg .ink-panel .text-gray-100,
-.page-bg .ink-panel .text-gray-200,
-.page-bg .ink-panel .text-gray-300 {
-  color: #ffffff !important;
-}
-
-.page-bg .ink-panel .text-gray-400,
-.page-bg .ink-panel .text-gray-500,
-.page-bg .ink-panel .text-gray-600 {
-  color: #cbd5e1 !important;
-}
-
-.page-bg .ink-panel .bg-white\/5,
-.page-bg .ink-panel .bg-white\/10,
-.page-bg .ink-panel .bg-white\/\[0\.03\] {
-  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 @keyframes fadeIn {
