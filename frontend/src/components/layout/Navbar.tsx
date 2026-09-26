@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Trophy, Search, Bell, Calendar, Settings, LogOut,
+  Bell, Calendar, Settings, LogOut,
   User, LayoutDashboard, ChevronDown, Menu, X, Swords, MessageCircleMore,
   Award, Home, Trophy, Search
 } from 'lucide-react';
@@ -57,6 +57,12 @@ export default function Navbar() {
   };
 
   const avatarLetter = user?.fullName?.[0]?.toUpperCase() || 'U';
+  const publicLinks = [
+    { label: 'Tournaments', to: '/' },
+    { label: 'Forums', to: '/forum' },
+    { label: 'Rankings', to: '/scoring' },
+    { label: 'About', to: '/about' },
+  ];
 
   // Mobile Bottom Bar Tabs
   const profileOrAuthLink = isAuthenticated && user ? `/profile/${user.id}` : '/role-select';
@@ -76,33 +82,6 @@ export default function Navbar() {
 
   return (
     <>
-<<<<<<< HEAD
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 gap-4">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-              <img src="/logo.png" alt="VIVAATHI" className="w-9 h-9 rounded-xl shadow-lg" />
-              <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 hidden sm:block">VIVAATHI</span>
-            </Link>
-
-            {/* Search Bar - Center */}
-            <div className="flex-1 max-w-md hidden md:block">
-              <SearchBar />
-            </div>
-
-            {/* Nav Links */}
-            <div className="hidden lg:flex items-center gap-6">
-              <Link to="/" className="nav-link text-sm">Home</Link>
-              <Link to="/forum" className="nav-link text-sm">Forum</Link>
-              <Link to="/scoring" className="nav-link text-sm">Scoring</Link>
-              <Link to="/about" className="nav-link text-sm">About Us</Link>
-              <Link to="/news" className="nav-link text-sm">News</Link>
-            </div>
-
-            {/* Right: Auth */}
-            <div className="flex items-center gap-3">
-=======
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-300">
         <div className="editorial-shell">
           <div className="flex items-center justify-between h-[64px] sm:h-[76px] gap-3">
@@ -132,7 +111,6 @@ export default function Navbar() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
->>>>>>> d732d92ecba79deb5a18f7547395d2cbd9f60785
               {isAuthenticated && user ? (
                 <div className="flex items-center gap-2 sm:gap-3">
                   {/* Quick Notification Bell Icon */}
@@ -217,17 +195,12 @@ export default function Navbar() {
                 </div>
               ) : (
                 <Link to="/role-select"
-                  className="btn-primary text-sm hidden sm:flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  Log In / Sign Up
+                  className="btn-primary text-xs hidden sm:flex">
+                  Sign In
                 </Link>
               )}
 
-<<<<<<< HEAD
-              {/* Mobile menu button */}
-=======
               {/* Mobile Menu Button */}
->>>>>>> d732d92ecba79deb5a18f7547395d2cbd9f60785
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="lg:hidden p-2 text-[#06192b] hover:bg-[#eef5ff] transition-colors border border-slate-300 relative active:scale-95">
@@ -245,43 +218,6 @@ export default function Navbar() {
 
         {/* Interactive Mobile Drawer Overlay */}
         {mobileOpen && (
-<<<<<<< HEAD
-          <div className="lg:hidden glass-dark border-t border-white/10 px-4 py-4 space-y-3 animate-fade-in">
-            <div className="mb-4">
-              <SearchBar />
-            </div>
-            <Link to="/" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Home</Link>
-            <Link to="/forum" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Forum</Link>
-            <Link to="/scoring" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">Scoring</Link>
-            <Link to="/about" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">About Us</Link>
-            <Link to="/news" onClick={() => setMobileOpen(false)} className="block text-gray-300 hover:text-white py-2">News</Link>
-            {isAuthenticated && user && (
-              <>
-                <Link to="/notifications" onClick={() => setMobileOpen(false)} className="flex items-center justify-between text-[#06192b] py-2 font-semibold">
-                  <span className="flex items-center gap-2">
-                    <Bell className="w-4 h-4" /> Notifications
-                  </span>
-                  {unreadCount > 0 && (
-                    <span className="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">
-                      {unreadCount} new
-                    </span>
-                  )}
-                </Link>
-                <Link to={`/profile/${user.id}#diaries`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-[#8a6a00] py-2 font-semibold">
-                  <Award className="w-4 h-4" /> My Diaries
-                </Link>
-                <Link to="/messages" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 text-blue-400 hover:text-blue-300 py-2 font-semibold">
-                  <MessageCircleMore className="w-4 h-4" /> Messages
-                </Link>
-              </>
-            )}
-            {!isAuthenticated && (
-              <Link to="/role-select" onClick={() => setMobileOpen(false)}
-                className="btn-primary text-sm inline-flex items-center gap-2 mt-2">
-                <User className="w-4 h-4" /> Log In / Sign Up
-              </Link>
-            )}
-=======
           <div className="fixed inset-0 top-[64px] z-50 lg:hidden flex">
             {/* Backdrop */}
             <div 
@@ -400,7 +336,6 @@ export default function Navbar() {
                 </div>
               )}
             </div>
->>>>>>> d732d92ecba79deb5a18f7547395d2cbd9f60785
           </div>
         )}
       </nav>
